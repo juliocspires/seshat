@@ -28,6 +28,7 @@
 #include <queue>
 #include "sample.h"
 
+/*
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/util/XMLUni.hpp>
@@ -40,6 +41,7 @@
 #include <xercesc/dom/DOMNodeIterator.hpp>
 #include <xercesc/dom/DOMNodeList.hpp>
 #include <xercesc/dom/DOMText.hpp>
+*/
 
 #define PI 3.14159265
 
@@ -135,7 +137,8 @@ void Sample::loadSCGInk(char *str) {
 }
 
 void Sample::loadInkML(char *str) {
-  
+  fprintf(stderr, "loadInkML currently disabled.");
+/*  
   //Check if file exists
   FILE *auxfile=fopen(str,"r");
   if( !auxfile ) {
@@ -305,9 +308,8 @@ void Sample::loadInkML(char *str) {
       if( p->y > dataon[i]->rt ) dataon[i]->rt = (int)p->y;
     }
   }
-
+*/
 }
-
 
 Sample::~Sample() {
   for(int i=0; i<nStrokes(); i++) {
