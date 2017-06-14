@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #ifndef _SYMFEATURES_
 #define _SYMFEATURES_
 
@@ -31,18 +31,18 @@ class DataSequence;
 #include "featureson.h"
 #include "sample.h"
 
-class SymFeatures{
-  static const int  ON_FEAT = 7;
-  static const int OFF_FEAT = 9;
-  double means_on[ON_FEAT], means_off[OFF_FEAT];
-  double  stds_on[ON_FEAT],  stds_off[OFF_FEAT];
-  
-public:
-  SymFeatures(char *mav_on, char *mav_off);
-  ~SymFeatures();
+class SymFeatures {
+    static const int ON_FEAT = 7;
+    static const int OFF_FEAT = 9;
+    double means_on[ON_FEAT], means_off[OFF_FEAT];
+    double stds_on[ON_FEAT], stds_off[OFF_FEAT];
 
-  DataSequence *getOnline(Sample *M, SegmentHyp *SegHyp);
-  DataSequence *getOfflineFKI(int **img, int H, int W);
+public:
+    SymFeatures(char *mav_on, char *mav_off);
+    ~SymFeatures();
+
+    DataSequence *getOnline(Sample *M, SegmentHyp *SegHyp);
+    DataSequence *getOfflineFKI(int **img, int H, int W);
 };
 
 #endif

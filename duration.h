@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #ifndef _DURATION_MODEL_
 #define _DURATION_MODEL_
 
@@ -24,18 +24,18 @@
 
 using namespace std;
 
-class DurationModel{
-  int max_strokes;
-  int Nsyms;
-  float **duration_prob;
+class DurationModel {
+    int max_strokes;
+    int Nsyms;
+    float **duration_prob;
 
-  void loadModel(FILE *fd, SymRec *sr);
+    void loadModel(FILE *fd, SymRec *sr);
 
- public:
-  DurationModel(char *str, int mxs, SymRec *sr);
-  ~DurationModel();
+public:
+    DurationModel(char *str, int mxs, SymRec *sr);
+    ~DurationModel();
 
-  float prob(int symclas, int size);
+    float prob(int symclas, int size);
 };
 
 #endif

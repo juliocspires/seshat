@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #ifndef _HYPOTHESIS_
 #define _HYPOTHESIS_
 
@@ -33,33 +33,33 @@ struct Grammar;
 
 using namespace std;
 
-struct Hypothesis{
-  int clase; //If the hypothesis encodes a terminal symbols this is the class id (-1 otherwise)
-  double pr; //log-probability
+struct Hypothesis {
+    int clase; //If the hypothesis encodes a terminal symbols this is the class id (-1 otherwise)
+    double pr; //log-probability
 
-  //References to left-child (hi) and right-child (hd) to create the derivation tree
-  Hypothesis *hi, *hd;
+    //References to left-child (hi) and right-child (hd) to create the derivation tree
+    Hypothesis *hi, *hd;
 
-  //The production used to create this hypothesis (either Binary or terminal)
-  ProductionB *prod;
-  ProductionT *pt;
+    //The production used to create this hypothesis (either Binary or terminal)
+    ProductionB *prod;
+    ProductionT *pt;
 
-  //INKML_id for terminal symbols in order to create the InkML output
-  string inkml_id;
-  //Auxiliar var to retrieve the used production in the special SSE treatment
-  ProductionB *prod_sse;
+    //INKML_id for terminal symbols in order to create the InkML output
+    string inkml_id;
+    //Auxiliar var to retrieve the used production in the special SSE treatment
+    ProductionB *prod_sse;
 
-  //Vertical center left and right
-  int lcen, rcen;
+    //Vertical center left and right
+    int lcen, rcen;
 
-  CellCYK *parent; //Parent cell
-  int ntid;        //Nonterminal ID in parent
+    CellCYK *parent; //Parent cell
+    int ntid; //Nonterminal ID in parent
 
-  //Methods
-  Hypothesis(int c, double p, CellCYK *cd, int nt);
-  ~Hypothesis();
+    //Methods
+    Hypothesis(int c, double p, CellCYK *cd, int nt);
+    ~Hypothesis();
 
-  void copy(Hypothesis *SYM);
+    void copy(Hypothesis *SYM);
 };
 
 #endif

@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #ifndef __GMM__
 #define __GMM__
 
@@ -23,20 +23,19 @@
 #include <cmath>
 #include <cfloat>
 
+class GMM {
+    int C, D, G;
+    float **invcov, **mean, **weight, *prior, *det;
 
-class GMM{
-  int C, D, G;
-  float **invcov, **mean, **weight, *prior, *det;
+    void loadModel(char *str);
+    float pdf(int c, float *v);
 
-  void loadModel( char *str );
-  float pdf(int c, float *v);
+public:
 
- public:
+    GMM(char *model);
+    ~GMM();
 
-  GMM(char *model);
-  ~GMM();
-
-  void posterior(float *x, float *pr);
+    void posterior(float *x, float *pr);
 };
 
 

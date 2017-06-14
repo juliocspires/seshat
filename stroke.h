@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #ifndef _STROKE_
 #define _STROKE_
 
@@ -25,41 +25,41 @@
 
 using namespace std;
 
-struct Punto{
-  float x,y;
+struct Punto {
+    float x, y;
 
-  Punto(float vx, float vy) {
-    x = vx;
-    y = vy;
-  }
+    Punto(float vx, float vy) {
+        x = vx;
+        y = vy;
+    }
 
-  Punto() {}
+    Punto() {
+    }
 };
 
+class Stroke {
+    Punto *pseq;
+    int NP;
+    int id; //InkML information
 
-class Stroke{
-  Punto *pseq;
-  int NP;
-  int id; //InkML information
+public:
+    //Coordinates of the region it defines
+    int rx, ry, rs, rt;
+    int cx, cy; //Centroid
 
- public:
-  //Coordinates of the region it defines
-  int rx, ry, rs, rt;
-  int cx, cy; //Centroid
-  
-  Stroke(int np);
-  Stroke(int np, FILE *fd);
-  Stroke(FILE *fd);
-  Stroke(char *str, int inkml_id);
-  ~Stroke();
+    Stroke(int np);
+    Stroke(int np, FILE *fd);
+    Stroke(FILE *fd);
+    Stroke(char *str, int inkml_id);
+    ~Stroke();
 
-  void set(int idx, Punto *p);
-  Punto *get(int idx);
-  int getNpuntos();
-  int getId();
-  void print();
+    void set(int idx, Punto *p);
+    Punto *get(int idx);
+    int getNpuntos();
+    int getId();
+    void print();
 
-  float min_dist(Stroke *st);
+    float min_dist(Stroke *st);
 };
 
 #endif

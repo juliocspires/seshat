@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #ifndef _GRAMMAR_
 #define _GRAMMAR_
 
@@ -30,32 +30,32 @@ class gParser;
 
 using namespace std;
 
-struct Grammar{
-  map<string,int> noTerminales;
-  list<int> initsyms;
-  bool *esInit;
-  SymRec *sym_rec;
+struct Grammar {
+    map<string, int> noTerminales;
+    list<int> initsyms;
+    bool *esInit;
+    SymRec *sym_rec;
 
-  list<ProductionB *> prodsH, prodsSup, prodsSub;
-  list<ProductionB *> prodsV, prodsVe, prodsIns, prodsMrt, prodsSSE;
-  list<ProductionT *> prodTerms;
+    list<ProductionB *> prodsH, prodsSup, prodsSub;
+    list<ProductionB *> prodsV, prodsVe, prodsIns, prodsMrt, prodsSSE;
+    list<ProductionT *> prodTerms;
 
-  Grammar(char *conf, SymRec *SR);
-  ~Grammar();
+    Grammar(char *conf, SymRec *SR);
+    ~Grammar();
 
-  const char *key2str(int k);
-  void addInitSym(char *str);
-  void addNoTerminal(char *str);
-  void addTerminal(float pr, char *S, char *T, char *tex);
+    const char *key2str(int k);
+    void addInitSym(char *str);
+    void addNoTerminal(char *str);
+    void addTerminal(float pr, char *S, char *T, char *tex);
 
-  void addRuleH(float pr, char *S, char *A, char *B, char *out, char *merge);
-  void addRuleV(float pr, char *S, char *A, char *B, char *out, char *merge);
-  void addRuleVe(float pr, char *S, char *A, char *B, char *out, char *merge);
-  void addRuleSup(float pr, char *S, char *A, char *B, char *out, char *merge);
-  void addRuleSub(float pr, char *S, char *A, char *B, char *out, char *merge);
-  void addRuleSSE(float pr, char *S, char *A, char *B, char *out, char *merge);
-  void addRuleIns(float pr, char *S, char *A, char *B, char *out, char *merge);
-  void addRuleMrt(float pr, char *S, char *A, char *B, char *out, char *merge);
+    void addRuleH(float pr, char *S, char *A, char *B, char *out, char *merge);
+    void addRuleV(float pr, char *S, char *A, char *B, char *out, char *merge);
+    void addRuleVe(float pr, char *S, char *A, char *B, char *out, char *merge);
+    void addRuleSup(float pr, char *S, char *A, char *B, char *out, char *merge);
+    void addRuleSub(float pr, char *S, char *A, char *B, char *out, char *merge);
+    void addRuleSSE(float pr, char *S, char *A, char *B, char *out, char *merge);
+    void addRuleIns(float pr, char *S, char *A, char *B, char *out, char *merge);
+    void addRuleMrt(float pr, char *S, char *A, char *B, char *out, char *merge);
 };
 
 #endif

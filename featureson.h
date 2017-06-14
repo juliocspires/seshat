@@ -18,7 +18,7 @@
 This file is a modification of the online features original software
 covered by the following copyright and permission notice:
 
-*/
+ */
 /*
     Copyright (C) 2006,2007 Moisés Pastor <mpastorg@dsic.upv.es>
 
@@ -34,7 +34,7 @@ covered by the following copyright and permission notice:
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #ifndef FEATURES_H
 #define FEATURES_H
 
@@ -51,34 +51,34 @@ covered by the following copyright and permission notice:
 using namespace std;
 
 class frame {
-  public:
-    double x,y,dx,dy,ax,ay,k;
+public:
+    double x, y, dx, dy, ax, ay, k;
 
     void print(ostream & fd);
     int get_fr_dim();
 
-    double getFea(int i){
-      switch (i){
-      case 0: return x;
-      case 1: return y;
-      case 2: return dx;
-      case 3: return dy;
-      case 4: return ax;
-      case 5: return ay;
-      case 6: return k;
-      default:
-	fprintf(stderr, "Error: getFea(%d)\n", i);
-	exit(-1);
-      }
+    double getFea(int i) {
+        switch (i) {
+            case 0: return x;
+            case 1: return y;
+            case 2: return dx;
+            case 3: return dy;
+            case 4: return ax;
+            case 5: return ay;
+            case 6: return k;
+            default:
+                fprintf(stderr, "Error: getFea(%d)\n", i);
+                exit(-1);
+        }
     }
 };
 
 class sentenceF {
-  public:
+public:
     string transcrip;
     int n_frames;
     frame * frames;
-    
+
     sentenceF();
     ~sentenceF();
 
@@ -87,9 +87,9 @@ class sentenceF {
 
     void calculate_features(sentence &s);
 
-  private:
+private:
     vector<PointR> normalizaAspect(vector<Point> & puntos);
-    void calculate_derivatives(vector<PointR> & points, bool norm=true);
+    void calculate_derivatives(vector<PointR> & points, bool norm = true);
     void calculate_kurvature();
 };
 

@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #ifndef _LOGSPACE_
 #define _LOGSPACE_
 
@@ -22,27 +22,27 @@
 #include <list>
 #include "cellcyk.h"
 
-class LogSpace{
-  int N;
-  int RX, RY;
-  CellCYK **data;
+class LogSpace {
+    int N;
+    int RX, RY;
+    CellCYK **data;
 
-  void quicksort(CellCYK **vec, int ini, int fin);
-  int  partition(CellCYK **vec, int ini, int fin);
-  void bsearch(int sx, int sy, int ss, int st, list<CellCYK*> *set);
-  void bsearchStv(int sx, int sy, int ss, int st, list<CellCYK*> *set, bool U_V, CellCYK *cd);
-  void bsearchHBP(int sx, int sy, int ss, int st, list<CellCYK*> *set, CellCYK *cd);
+    void quicksort(CellCYK **vec, int ini, int fin);
+    int partition(CellCYK **vec, int ini, int fin);
+    void bsearch(int sx, int sy, int ss, int st, list<CellCYK*> *set);
+    void bsearchStv(int sx, int sy, int ss, int st, list<CellCYK*> *set, bool U_V, CellCYK *cd);
+    void bsearchHBP(int sx, int sy, int ss, int st, list<CellCYK*> *set, CellCYK *cd);
 
- public:
-  LogSpace(CellCYK *c, int nr, int dx, int dy);
-  ~LogSpace();
+public:
+    LogSpace(CellCYK *c, int nr, int dx, int dy);
+    ~LogSpace();
 
-  void getH(CellCYK *c, list<CellCYK*> *set);
-  void getV(CellCYK *c, list<CellCYK*> *set);
-  void getU(CellCYK *c, list<CellCYK*> *set);
-  void getI(CellCYK *c, list<CellCYK*> *set);
-  void getM(CellCYK *c, list<CellCYK*> *set);
-  void getS(CellCYK *c, list<CellCYK*> *set);
+    void getH(CellCYK *c, list<CellCYK*> *set);
+    void getV(CellCYK *c, list<CellCYK*> *set);
+    void getU(CellCYK *c, list<CellCYK*> *set);
+    void getI(CellCYK *c, list<CellCYK*> *set);
+    void getM(CellCYK *c, list<CellCYK*> *set);
+    void getS(CellCYK *c, list<CellCYK*> *set);
 };
 
 #endif

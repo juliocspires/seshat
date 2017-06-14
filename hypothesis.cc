@@ -14,35 +14,35 @@
 
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #include "hypothesis.h"
 
 Hypothesis::Hypothesis(int c, double p, CellCYK *cd, int nt) {
-  clase = c;
-  pr = p;
-  hi = hd = NULL;
-  prod = NULL;
-  prod_sse = NULL;
-  pt = NULL;
-  lcen = rcen = 0;
-  parent = cd;
-  ntid = nt;
-  inkml_id = "none";
+    clase = c;
+    pr = p;
+    hi = hd = NULL;
+    prod = NULL;
+    prod_sse = NULL;
+    pt = NULL;
+    lcen = rcen = 0;
+    parent = cd;
+    ntid = nt;
+    inkml_id = "none";
 }
 
 void Hypothesis::copy(Hypothesis *H) {
-  clase = H->clase;
-  pr = H->pr;
-  hi = H->hi;
-  hd = H->hd;
-  prod = H->prod;
-  prod_sse = H->prod_sse;
-  pt = H->pt;
-  lcen = H->lcen;
-  rcen = H->rcen;
-  parent = H->parent;
-  ntid = H->ntid;
-  inkml_id = H->inkml_id;
+    clase = H->clase;
+    pr = H->pr;
+    hi = H->hi;
+    hd = H->hd;
+    prod = H->prod;
+    prod_sse = H->prod_sse;
+    pt = H->pt;
+    lcen = H->lcen;
+    rcen = H->rcen;
+    parent = H->parent;
+    ntid = H->ntid;
+    inkml_id = H->inkml_id;
 }
 
 Hypothesis::~Hypothesis() {

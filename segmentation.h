@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 #ifndef _SEGMENTATION_MODEL_
 #define _SEGMENTATION_MODEL_
 
@@ -26,15 +26,14 @@
 
 using namespace std;
 
+class SegmentationModelGMM {
+    GMM *model;
 
-class SegmentationModelGMM{
-  GMM *model;
+public:
+    SegmentationModelGMM(char *mod);
+    ~SegmentationModelGMM();
 
- public:
-  SegmentationModelGMM(char *mod);
-  ~SegmentationModelGMM();
-
-  float prob(CellCYK *cd, Sample *m);
+    float prob(CellCYK *cd, Sample *m);
 };
 
 #endif
