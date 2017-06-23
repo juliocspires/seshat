@@ -48,8 +48,9 @@ SymRec::SymRec(char *config) {
         fscanf(fd, "%s", info); //Info
 
         //Remove the last \n character
-        if (info[strlen(info) - 1] == '\n')
+        if (info[strlen(info) - 1] == '\n') {
             info[strlen(info) - 1] = '\0';
+        }
 
         if (!strcmp(id, "RNNon")) strcpy(RNNon, info);
         else if (!strcmp(id, "RNNoff")) strcpy(RNNoff, info);
@@ -150,8 +151,9 @@ SymRec::SymRec(char *config) {
 
     //create trainer
     Trainer trainer_on(cout, blstm_on, conf_on, wc_on, &deh_on);
-    if (conf_on.get<bool>("loadWeights", false))
+    if (conf_on.get<bool>("loadWeights", false)) {
         deh_on.load(conf_on, cout);
+    }
 
     //Offline info
     ConfigFile conf_off(RNNoff);
@@ -190,8 +192,9 @@ SymRec::SymRec(char *config) {
 
     //create trainer
     Trainer trainer_off(cout, blstm_off, conf_off, wc_off, &deh_off);
-    if (conf_off.get<bool>("loadWeights", false))
+    if (conf_off.get<bool>("loadWeights", false)) {
         deh_off.load(conf_off, cout);
+    }
 }
 
 SymRec::~SymRec() {
@@ -217,8 +220,9 @@ int SymRec::keyClase(char *str) {
 }
 
 bool SymRec::checkClase(char *str) {
-    if (cl2key.find(str) == cl2key.end())
+    if (cl2key.find(str) == cl2key.end()) {
         return false;
+    }
     return true;
 }
 
@@ -271,16 +275,17 @@ int SymRec::classify(Sample *M, SegmentHyp *SegHyp, const int NB, int *vclase, f
         for (int j = 0; j < M->getStroke(*it)->getNpuntos(); j++) {
             Punto *p = M->getStroke(*it)->get(j);
 
-            if (M->getStroke(*it)->ry < regy)
+            if (M->getStroke(*it)->ry < regy) {
                 regy = M->getStroke(*it)->ry;
-            if (M->getStroke(*it)->rt > regt)
+            }
+            if (M->getStroke(*it)->rt > regt) {
                 regt = M->getStroke(*it)->rt;
+            }
 
             SegHyp->cen += p->y;
 
             N++;
         }
-
     }
     SegHyp->cen /= N;
     *as = (SegHyp->cen + regt) / 2;
@@ -301,8 +306,9 @@ int SymRec::classify(Sample *M, SegmentHyp *SegHyp, const int NB, int *vclase, f
 
     //cout << feat_off->inputs;
 
-    for (int i = 0; i < Rows; i++)
+    for (int i = 0; i < Rows; i++) {
         delete[] img[i];
+    }
     delete[] img;
 
     //n-best classification
@@ -336,20 +342,25 @@ int SymRec::classify(Sample *M, SegmentHyp *SegHyp, const int NB, int *vclase, f
             clashyb[hybnext].first = clason[i].first;
             clashyb[hybnext].second = clason[i].second;
 
-            for (int j = 0; j < NB; j++)
+            for (int j = 0; j < NB; j++) {
                 if (clason[i].second == clasoff[j].second) {
                     clashyb[hybnext].first += clasoff[j].first;
                     break;
                 }
-
+            }
             hybnext++;
         }
 
-        if (clasoff[i].second < 0) continue;
+        if (clasoff[i].second < 0) {
+            continue;
+        }
+
         bool found = false;
-        for (int j = 0; j < NB && !found; j++)
-            if (clasoff[i].second == clason[j].second)
+        for (int j = 0; j < NB && !found; j++) {
+            if (clasoff[i].second == clason[j].second) {
                 found = true;
+            }
+        }
 
         //Add the (1-alpha) probability if the class is in OFF but not in ON
         if (!found) {
@@ -378,26 +389,32 @@ void SymRec::BLSTMclassification(Mdrnn *net, DataSequence *seq, pair<float, int>
     int NCLA = L->outputActivations.shape[1];
 
     pair<float, int> *prob_class = new pair<float, int>[NCLA];
-    for (int i = 0; i < NCLA; i++)
+    for (int i = 0; i < NCLA; i++) {
         prob_class[i].second = cl2key[ header_on.targetLabels[i] ]; //targetLabels on = targetLabels off
+    }
 
-    for (int i = 0; i < NCLA; i++)
+    for (int i = 0; i < NCLA; i++) {
         prob_class[i].first = 0.0;
+    }
 
     //Compute the average posterior probability per class
-    for (int nvec = 0; nvec < NVEC; nvec++)
-        for (int ncla = 0; ncla < NCLA; ncla++)
+    for (int nvec = 0; nvec < NVEC; nvec++) {
+        for (int ncla = 0; ncla < NCLA; ncla++) {
             prob_class[ncla].first += L->outputActivations.data[nvec * NCLA + ncla];
+        }
+    }
 
-    for (int ncla = 0; ncla < NCLA; ncla++)
+    for (int ncla = 0; ncla < NCLA; ncla++) {
         prob_class[ncla].first /= NVEC;
+    }
 
     //Sort classification result by its probability
     sort(prob_class, prob_class + NCLA, std::greater< pair<float, int> >());
 
     //Copy n-best to output vector
-    for (int i = 0; i < NB; i++)
+    for (int i = 0; i < NB; i++) {
         claspr[i] = prob_class[i];
+    }
 
     delete[] prob_class;
 }

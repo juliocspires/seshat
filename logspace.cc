@@ -27,8 +27,9 @@ LogSpace::LogSpace(CellCYK *c, int nr, int dx, int dy) {
     //Create a vector to store the regions
     data = new CellCYK*[N];
     int i = 0;
-    for (CellCYK *r = c; r; r = r->sig)
+    for (CellCYK *r = c; r; r = r->sig) {
         data[i++] = r;
+    }
 
     //Sort the regions
     quicksort(data, 0, N - 1);
@@ -134,10 +135,11 @@ void LogSpace::bsearch(int sx, int sy, int ss, int st, list<CellCYK*> *set) {
     for (i = 0, j = N; i < j;) {
         int m = (i + j) / 2;
 
-        if (sx <= data[m]->x)
+        if (sx <= data[m]->x) {
             j = m;
-        else
+        } else {
             i = m + 1;
+        }
     }
 
     //Retrieve the compatible regions
@@ -158,18 +160,20 @@ void LogSpace::bsearchStv(int sx, int sy, int ss, int st, list<CellCYK*> *set, b
     for (i = 0, j = N; i < j;) {
         int m = (i + j) / 2;
 
-        if (sx <= data[m]->x)
+        if (sx <= data[m]->x) {
             j = m;
-        else
+        } else {
             i = m + 1;
+        }
     }
 
     //Retrieve the compatible regions
     if (U_V) { //Direction 'Up' (U)
         while (i < N && data[i]->x <= ss) {
             if (data[i]->t <= st && data[i]->t >= sy && data[i]->s <= ss) {
-                if (data[i]->t < cd->y)
+                if (data[i]->t < cd->y) {
                     sy = max(max(data[i]->y, data[i]->t - RY), sy);
+                }
                 set->push_back(data[i]);
             }
             i++;
@@ -177,16 +181,15 @@ void LogSpace::bsearchStv(int sx, int sy, int ss, int st, list<CellCYK*> *set, b
     } else { //Direction 'Down' (V)
         while (i < N && data[i]->x <= ss) {
             if (data[i]->y <= st && data[i]->y >= sy && data[i]->s <= ss) {
-                if (data[i]->y > cd->t)
+                if (data[i]->y > cd->t) {
                     st = min(min(data[i]->t, data[i]->y + RY), st);
+                }
                 set->push_back(data[i]);
             }
             i++;
         }
     }
 }
-
-
 
 //Version that reduces the sx-ss region as soon as hypotheses are found
 
@@ -196,24 +199,24 @@ void LogSpace::bsearchHBP(int sx, int sy, int ss, int st, list<CellCYK*> *set, C
     for (i = 0, j = N; i < j;) {
         int m = (i + j) / 2;
 
-        if (sx <= data[m]->x)
+        if (sx <= data[m]->x) {
             j = m;
-        else
+        } else {
             i = m + 1;
+        }
     }
 
     //Retrieve the compatible regions
     while (i < N && data[i]->x <= ss) {
         if (data[i]->y <= st && data[i]->t >= sy) {
-            if (data[i]->x > cd->s)
+            if (data[i]->x > cd->s) {
                 ss = min(min(data[i]->s, data[i]->x + RX), ss);
+            }
             set->push_back(data[i]);
         }
         i++;
     }
 }
-
-
 
 //Sort according to x coordinate of region (x,y)-(s,t)
 

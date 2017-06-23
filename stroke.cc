@@ -30,8 +30,9 @@ Stroke::Stroke(int np) {
     cx = cy = 0;
     rx = ry = INT_MAX;
     rs = rt = -INT_MAX;
-    for (int i = 0; i < NP; i++)
+    for (int i = 0; i < NP; i++) {
         pseq[i].x = pseq[i].y = -1;
+    }
 }
 
 Stroke::Stroke(int np, FILE *fd) {
@@ -60,20 +61,26 @@ Stroke::Stroke(char *str, int inkml_id) {
     //Remove broken lines
     for (int i = 0; str[i]; i++)
         if (str[i] == '\n') {
-            for (int j = i; str[j]; j++)
+            for (int j = i; str[j]; j++) {
                 str[j] = str[j + 1];
+            }
         }
 
     for (int i = 0; str[i]; i++) {
 
-        while (str[i] && !esNum(str[i])) i++;
+        while (str[i] && !esNum(str[i])) {
+            i++;
+        }
 
-        if (!str[i]) break;
+        if (!str[i]) {
+            break;
+        }
 
         float px = 0, py = 0;
 
-        for (iaux = 0; str[i] && esNum(str[i]); iaux++, i++)
+        for (iaux = 0; str[i] && esNum(str[i]); iaux++, i++) {
             aux[iaux] = str[i];
+        }
         aux[iaux] = 0;
 
         if (!str[i]) break;
@@ -84,8 +91,9 @@ Stroke::Stroke(char *str, int inkml_id) {
 
         if (!str[i]) break;
 
-        for (iaux = 0; str[i] && esNum(str[i]); iaux++, i++)
+        for (iaux = 0; str[i] && esNum(str[i]); iaux++, i++) {
             aux[iaux] = str[i];
+        }
         aux[iaux] = 0;
 
         py = atof(aux);
@@ -132,8 +140,9 @@ int Stroke::getId() {
 
 void Stroke::print() {
     printf("STROKE - %d points\n", NP);
-    for (int i = 0; i < NP; i++)
+    for (int i = 0; i < NP; i++) {
         printf(" (%g,%g)", pseq[i].x, pseq[i].y);
+    }
     printf("\n");
 }
 
@@ -146,7 +155,9 @@ float Stroke::min_dist(Stroke *st) {
             float d = (pseq[i].x - p->x)*(pseq[i].x - p->x)
                     + (pseq[i].y - p->y)*(pseq[i].y - p->y);
 
-            if (d < mind) mind = d;
+            if (d < mind) {
+                mind = d;
+            }
         }
     }
 

@@ -27,8 +27,9 @@ using namespace std;
 //Aux functions
 
 Hypothesis *leftmost(Hypothesis *h) {
-    if (h->pt)
+    if (h->pt) {
         return h;
+    }
 
     Hypothesis *izq = leftmost(h->hi);
     Hypothesis *der = leftmost(h->hd);
@@ -37,8 +38,9 @@ Hypothesis *leftmost(Hypothesis *h) {
 }
 
 Hypothesis *rightmost(Hypothesis *h) {
-    if (h->pt)
+    if (h->pt) {
         return h;
+    }
 
     Hypothesis *izq = rightmost(h->hi);
     Hypothesis *der = rightmost(h->hd);
@@ -75,8 +77,9 @@ SpaRel::SpaRel(GMM *gmm, Sample *m) {
 }
 
 void SpaRel::smooth(float *post) {
-    for (int i = 0; i < NRELS; i++)
+    for (int i = 0; i < NRELS; i++) {
         post[i] = (post[i] + 0.02) / (1.00 + NRELS * 0.02);
+    }
 }
 
 void SpaRel::getFeas(Hypothesis *a, Hypothesis *b, float *sample, int ry) {
@@ -103,8 +106,9 @@ double SpaRel::compute_prob(Hypothesis *h1, Hypothesis *h2, int k) {
         Hypothesis *rma = rightmost(h1);
         Hypothesis *lmb = leftmost(h2);
 
-        if (lmb->parent->x < rma->parent->x || lmb->parent->s <= rma->parent->s)
+        if (lmb->parent->x < rma->parent->x || lmb->parent->s <= rma->parent->s) {
             return 0.0;
+        }
     }
 
     //Compute probabilities
@@ -145,22 +149,26 @@ double SpaRel::getVerProb(Hypothesis *ha, Hypothesis *hb, bool strict) {
             || (hb->parent->x > ha->parent->s || hb->parent->s < ha->parent->x))
         return 0.0;
 
-    if (!strict)
+    if (!strict) {
         return compute_prob(ha, hb, 3);
+    }
 
     //Penalty for strict relationships
     float penalty = abs(ha->parent->x - hb->parent->x) / (3.0 * mue->RX)
             + abs(ha->parent->s - hb->parent->s) / (3.0 * mue->RX);
 
-    if (penalty > 0.95) penalty = 0.95;
+    if (penalty > 0.95) {
+        penalty = 0.95;
+    }
 
     return (1.0 - penalty) * compute_prob(ha, hb, 3);
 }
 
 double SpaRel::getInsProb(Hypothesis *ha, Hypothesis *hb) {
     if (solape(hb->parent, ha->parent) < 0.5 ||
-            hb->parent->x < ha->parent->x || hb->parent->y < ha->parent->y)
+            hb->parent->x < ha->parent->x || hb->parent->y < ha->parent->y) {
         return 0.0;
+    }
 
     return compute_prob(ha, hb, 4);
 }

@@ -27,10 +27,12 @@ SymFeatures::SymFeatures(char *mav_on, char *mav_off) {
     }
 
     //Read values online
-    for (int i = 0; i < ON_FEAT; i++)
+    for (int i = 0; i < ON_FEAT; i++) {
         fscanf(fd, "%lf", &means_on[i]);
-    for (int i = 0; i < ON_FEAT; i++)
+    }
+    for (int i = 0; i < ON_FEAT; i++) {
         fscanf(fd, "%lf", &stds_on[i]);
+    }
 
     fclose(fd);
 
@@ -41,10 +43,12 @@ SymFeatures::SymFeatures(char *mav_on, char *mav_off) {
     }
 
     //Read values offline
-    for (int i = 0; i < OFF_FEAT; i++)
+    for (int i = 0; i < OFF_FEAT; i++) {
         fscanf(fd, "%lf", &means_off[i]);
-    for (int i = 0; i < OFF_FEAT; i++)
+    }
+    for (int i = 0; i < OFF_FEAT; i++) {
         fscanf(fd, "%lf", &stds_off[i]);
+    }
 
     fclose(fd);
 }
@@ -154,8 +158,9 @@ DataSequence *SymFeatures::getOfflineFKI(int **img, int H, int W) {
     for (int x = 0; x < W; x++) {
 
         //Compute the FKI 9 features
-        for (int i = 0; i < OFF_FEAT; i++)
+        for (int i = 0; i < OFF_FEAT; i++) {
             c[i] = 0;
+        }
         c[4] = H + 1;
 
         for (int y = 1; y <= H; y++) {
@@ -163,26 +168,38 @@ DataSequence *SymFeatures::getOfflineFKI(int **img, int H, int W) {
                 c[1] += 1;
                 c[2] += y;
                 c[3] += y*y;
-                if (y < c[4]) c[4] = y;
-                if (y > c[5]) c[5] = y;
+                if (y < c[4]) {
+                    c[4] = y;
+                }
+                if (y > c[5]) {
+                    c[5] = y;
+                }
             }
-            if (y > 1 && img[y - 1][x] != img[y - 2][x]) c[8]++;
+            if (y > 1 && img[y - 1][x] != img[y - 2][x]) {
+                c[8]++;
+            }
         }
 
         c[2] /= H;
         c[3] /= H*H;
 
-        for (int y = c[4] + 1; y < c[5]; y++)
-            if (img[y - 1][x]) //Black pixel
+        for (int y = c[4] + 1; y < c[5]; y++) {
+            if (img[y - 1][x]) { //Black pixel
                 c[9]++;
+            }
+        }
 
         c[6] = H + 1;
         c[7] = 0;
         if (x + 1 < W) {
             for (int y = 1; y <= H; y++) {
                 if (img[y - 1][x + 1]) { //Black pixel
-                    if (y < c[6]) c[6] = y;
-                    if (y > c[7]) c[7] = y;
+                    if (y < c[6]) {
+                        c[6] = y;
+                    }
+                    if (y > c[7]) {
+                        c[7] = y;
+                    }
                 }
             }
         }

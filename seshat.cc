@@ -78,15 +78,19 @@ int main(int argc, char *argv[]) {
     //Load sample and system configuration
     Sample m(input);
     meParser seshat(config);
-
     //Render image to file
-    if (rr) m.render_img(render);
+    if (rr) {
+        m.render_img(render);
+    }
 
     //Set output InkML file
-    if (ro) m.set_out_inkml(output);
-
+    if (ro) {
+        m.set_out_inkml(output);
+    }
     //Set output DOT graph file
-    if (rd) m.set_out_dot(dot);
+    if (rd) {
+        m.set_out_dot(dot);
+    }
 
     //Print sample information
     m.print();

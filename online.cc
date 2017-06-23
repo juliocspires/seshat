@@ -41,13 +41,19 @@ covered by the following copyright and permission notice:
 // Aux functions
 
 inline int MAX(int a, int b) {
-    if (a >= b) return a;
-    else return b;
+    if (a >= b) {
+        return a;
+    } else {
+        return b;
+    }
 }
 
 inline int MIN(int a, int b) {
-    if (a <= b) return a;
-    else return b;
+    if (a <= b) {
+        return a;
+    } else {
+        return b;
+    }
 }
 
 //
@@ -59,21 +65,29 @@ stroke::stroke(int n_p, bool pen_d, bool is_ht) : n_points(n_p), pen_down(pen_d)
 
 int stroke::F_XMIN() {
     int xmin = INT_MAX;
-    for (int p = 0; p < n_points; p++)
-        if (xmin > points[p].x) xmin = points[p].x;
+    for (int p = 0; p < n_points; p++) {
+        if (xmin > points[p].x) {
+            xmin = points[p].x;
+        }
+    }
     return xmin;
 }
 
 int stroke::F_XMAX() {
     int xmax = INT_MIN;
-    for (int p = 0; p < n_points; p++)
-        if (xmax < points[p].x) xmax = points[p].x;
+    for (int p = 0; p < n_points; p++) {
+        if (xmax < points[p].x) {
+            xmax = points[p].x;
+        }
+    }
     return xmax;
 }
 
 int stroke::F_XMED() {
     int xmed = 0;
-    for (int p = 0; p < n_points; p++) xmed += points[p].x;
+    for (int p = 0; p < n_points; p++) {
+        xmed += points[p].x;
+    }
     return xmed / n_points;
 }
 
@@ -96,7 +110,9 @@ sentence * sentence::anula_rep_points() {
         vector<Point> puntos = strokes[s].points;
         int np = strokes[s].n_points;
         for (int p = 0; p < np; p++) {
-            if (p < (np - 1) && puntos[p] == puntos[p + 1]) continue;
+            if (p < (np - 1) && puntos[p] == puntos[p + 1]) {
+                continue;
+            }
             Point point(puntos[p].x, puntos[p].y);
             stroke_norep.points.push_back(point);
         }

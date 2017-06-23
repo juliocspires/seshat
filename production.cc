@@ -35,14 +35,15 @@ int check_str(char *str, char *pat) {
         if (str[i] == pat[0]) {
             int j = 1;
             while (str[i + 1] && pat[j]) {
-                if (str[i + j] != pat[j])
+                if (str[i + j] != pat[j]) {
                     break;
+                }
                 j++;
             }
-            if (!pat[j])
+            if (!pat[j]) {
                 return i;
+            }
         }
-
     return -1;
 }
 
@@ -70,7 +71,9 @@ ProductionB::ProductionB(int s, int a, int b, float pr, char *out) {
 }
 
 ProductionB::~ProductionB() {
-    if (outStr) delete[] outStr;
+    if (outStr) {
+        delete[] outStr;
+    }
 }
 
 //Percentage of the are of regin A that overlaps with region B
@@ -92,8 +95,9 @@ float ProductionB::solape(Hypothesis *a, Hypothesis *b) {
 }
 
 bool ProductionB::check_out() {
-    if (check_str(outStr, (char*) "$1") < 0 && check_str(outStr, (char*) "$2") < 0)
+    if (check_str(outStr, (char*) "$1") < 0 && check_str(outStr, (char*) "$2") < 0) {
         return false;
+    }
     return true;
 }
 
@@ -115,10 +119,11 @@ void ProductionB::printOut(Grammar *G, Hypothesis *H) {
             }
             i += 2;
 
-            if (H->hd->clase < 0)
+            if (H->hd->clase < 0) {
                 H->hd->prod->printOut(G, H->hd);
-            else
+            } else {
                 printf("%s", H->hd->pt->getTeX(H->hd->clase));
+            }
 
             while (outStr[i] != '$' || outStr[i + 1] != '1') {
                 putchar(outStr[i]);
@@ -126,10 +131,11 @@ void ProductionB::printOut(Grammar *G, Hypothesis *H) {
             }
             i += 2;
 
-            if (H->hi->clase < 0)
+            if (H->hi->clase < 0) {
                 H->hi->prod->printOut(G, H->hi);
-            else
+            } else {
                 printf("%s", H->hi->pt->getTeX(H->hi->clase));
+            }
         } else {
             if (pd1 >= 0) {
                 while (outStr[i] != '$' || outStr[i + 1] != '1') {
@@ -138,10 +144,11 @@ void ProductionB::printOut(Grammar *G, Hypothesis *H) {
                 }
                 i += 2;
 
-                if (H->hi->clase < 0)
+                if (H->hi->clase < 0) {
                     H->hi->prod->printOut(G, H->hi);
-                else
+                } else {
                     printf("%s", H->hi->pt->getTeX(H->hi->clase));
+                }
             }
             if (pd2 >= 0) {
                 while (outStr[i] != '$' || outStr[i + 1] != '2') {
@@ -150,10 +157,11 @@ void ProductionB::printOut(Grammar *G, Hypothesis *H) {
                 }
                 i += 2;
 
-                if (H->hd->clase < 0)
+                if (H->hd->clase < 0) {
                     H->hd->prod->printOut(G, H->hd);
-                else
+                } else {
                     printf("%s", H->hd->pt->getTeX(H->hd->clase));
+                }
             }
         }
         while (outStr[i]) {
@@ -190,7 +198,6 @@ void ProductionB::mergeRegions(Hypothesis *a, Hypothesis *b, Hypothesis *s) {
             fprintf(stderr, "Error: Unrecognized option '%c' in merge regions\n", merge_cen);
             exit(-1);
     }
-
 }
 
 
@@ -225,8 +232,9 @@ void ProductionH::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
         //evaluation escenario this must be removed
 
         Hypothesis *hip = H->hi->hi;
-        while (hip->prod && hip->hd->prod && hip->hd->hd->prod)
+        while (hip->prod && hip->hd->prod && hip->hd->hd->prod) {
             hip = hip->hd;
+        }
 
         Hypothesis *closep = hip->hd->hd;
         Hypothesis *rest = hip->hd;
@@ -258,9 +266,9 @@ void ProductionH::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
     } else {
         fprintf(fout, "<mrow>\n");
 
-        if (!H->hi->pt)
+        if (!H->hi->pt) {
             H->hi->prod->print_mathml(G, H->hi, fout, nid);
-        else {
+        } else {
             char tipo = H->hi->pt->getMLtype(H->hi->clase);
             char *clase = H->hi->pt->getTeX(H->hi->clase);
             *nid = *nid + 1;
@@ -273,9 +281,9 @@ void ProductionH::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
                     tipo, inkid, clase, tipo);
         }
 
-        if (!H->hd->pt)
+        if (!H->hd->pt) {
             H->hd->prod->print_mathml(G, H->hd, fout, nid);
-        else {
+        } else {
             char tipo = H->hd->pt->getMLtype(H->hd->clase);
             char *clase = H->hd->pt->getTeX(H->hd->clase);
             *nid = *nid + 1;
@@ -290,7 +298,6 @@ void ProductionH::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
 
         fprintf(fout, "</mrow>\n");
     }
-
 }
 
 
@@ -318,8 +325,9 @@ char ProductionV::tipo() {
 void ProductionV::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) {
 
     char *hdhiclass = NULL;
-    if (!H->hd->pt && !H->hd->hi->prod)
+    if (!H->hd->pt && !H->hd->hi->prod) {
         hdhiclass = H->hd->hi->pt->getTeX(H->hd->hi->clase);
+    }
 
     if (hdhiclass && (!strcmp(hdhiclass, "\\sum") || !strcmp(hdhiclass, "\\int") || !strcmp(hdhiclass, "-"))) {
         //Special cases: frac || msubsup bigop
@@ -333,9 +341,9 @@ void ProductionV::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
             //Init mfrac
             fprintf(fout, "<mfrac xml:id=\"%s\">\n", inkid);
             //Numerator
-            if (!H->hi->pt)
+            if (!H->hi->pt) {
                 H->hi->prod->print_mathml(G, H->hi, fout, nid);
-            else {
+            } else {
                 char tipo = H->hi->pt->getMLtype(H->hi->clase);
                 char *clase = H->hi->pt->getTeX(H->hi->clase);
 
@@ -348,9 +356,9 @@ void ProductionV::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
             }
 
             //Denominator
-            if (!H->hd->hd->pt)
+            if (!H->hd->hd->pt) {
                 H->hd->hd->prod->print_mathml(G, H->hd->hd, fout, nid);
-            else {
+            } else {
                 char tipo = H->hd->hd->pt->getMLtype(H->hd->hd->clase);
                 char *clase = H->hd->hd->pt->getTeX(H->hd->hd->clase);
 
@@ -379,9 +387,9 @@ void ProductionV::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
                     tipo, inkid, hdhiclass, tipo);
 
             //Under
-            if (!H->hd->hd->pt)
+            if (!H->hd->hd->pt) {
                 H->hd->hd->prod->print_mathml(G, H->hd->hd, fout, nid);
-            else {
+            } else {
                 char tipo = H->hd->hd->pt->getMLtype(H->hd->hd->clase);
                 char *clase = H->hd->hd->pt->getTeX(H->hd->hd->clase);
 
@@ -394,9 +402,9 @@ void ProductionV::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
             }
 
             //Over
-            if (!H->hi->pt)
+            if (!H->hi->pt) {
                 H->hi->prod->print_mathml(G, H->hi, fout, nid);
-            else {
+            } else {
                 char tipo = H->hi->pt->getMLtype(H->hi->clase);
                 char *clase = H->hi->pt->getTeX(H->hi->clase);
 
@@ -409,18 +417,16 @@ void ProductionV::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
             }
             //End munderover
             fprintf(fout, "</munderover>\n");
-
         }
-
         // End special cases
     } else {
 
         //Normal production print, munder
         fprintf(fout, "<munder>\n");
 
-        if (!H->hi->pt)
+        if (!H->hi->pt) {
             H->hi->prod->print_mathml(G, H->hi, fout, nid);
-        else {
+        } else {
             char tipo = H->hi->pt->getMLtype(H->hi->clase);
             char *clase = H->hi->pt->getTeX(H->hi->clase);
 
@@ -433,9 +439,9 @@ void ProductionV::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
                     tipo, inkid, clase, tipo);
         }
 
-        if (!H->hd->pt)
+        if (!H->hd->pt) {
             H->hd->prod->print_mathml(G, H->hd, fout, nid);
-        else {
+        } else {
             char tipo = H->hd->pt->getMLtype(H->hd->clase);
             char *clase = H->hd->pt->getTeX(H->hd->clase);
 
@@ -448,12 +454,8 @@ void ProductionV::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) 
                     tipo, inkid, clase, tipo);
         }
         fprintf(fout, "</munder>\n");
-
     }
-
 }
-
-
 
 //
 //ProductionVe methods
@@ -478,8 +480,9 @@ char ProductionVe::tipo() {
 void ProductionVe::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) {
 
     char *hdhiclass = NULL;
-    if (!H->hd->pt && !H->hd->hi->prod)
+    if (!H->hd->pt && !H->hd->hi->prod) {
         hdhiclass = H->hd->hi->pt->getTeX(H->hd->hi->clase);
+    }
 
     if (hdhiclass && (!strcmp(hdhiclass, "\\sum") || !strcmp(hdhiclass, "\\int") || !strcmp(hdhiclass, "-"))) {
         //Special cases: frac || msubsup bigop
@@ -493,9 +496,9 @@ void ProductionVe::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid)
             //Init mfrac
             fprintf(fout, "<mfrac xml:id=\"%s\">\n", inkid);
             //Numerator
-            if (!H->hi->pt)
+            if (!H->hi->pt) {
                 H->hi->prod->print_mathml(G, H->hi, fout, nid);
-            else {
+            } else {
                 char tipo = H->hi->pt->getMLtype(H->hi->clase);
                 char *clase = H->hi->pt->getTeX(H->hi->clase);
 
@@ -508,9 +511,9 @@ void ProductionVe::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid)
             }
 
             //Denominator
-            if (!H->hd->hd->pt)
+            if (!H->hd->hd->pt) {
                 H->hd->hd->prod->print_mathml(G, H->hd->hd, fout, nid);
-            else {
+            } else {
                 char tipo = H->hd->hd->pt->getMLtype(H->hd->hd->clase);
                 char *clase = H->hd->hd->pt->getTeX(H->hd->hd->clase);
 
@@ -539,9 +542,9 @@ void ProductionVe::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid)
                     tipo, inkid, hdhiclass, tipo);
 
             //Under
-            if (!H->hd->hd->pt)
+            if (!H->hd->hd->pt) {
                 H->hd->hd->prod->print_mathml(G, H->hd->hd, fout, nid);
-            else {
+            } else {
                 char tipo = H->hd->hd->pt->getMLtype(H->hd->hd->clase);
                 char *clase = H->hd->hd->pt->getTeX(H->hd->hd->clase);
 
@@ -554,9 +557,9 @@ void ProductionVe::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid)
             }
 
             //Over
-            if (!H->hi->pt)
+            if (!H->hi->pt) {
                 H->hi->prod->print_mathml(G, H->hi, fout, nid);
-            else {
+            } else {
                 char tipo = H->hi->pt->getMLtype(H->hi->clase);
                 char *clase = H->hi->pt->getTeX(H->hi->clase);
 
@@ -569,18 +572,16 @@ void ProductionVe::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid)
             }
             //End munderover
             fprintf(fout, "</munderover>\n");
-
         }
-
         // End special cases
     } else {
 
         //Normal production print, munder
         fprintf(fout, "<munder>\n");
 
-        if (!H->hi->pt)
+        if (!H->hi->pt) {
             H->hi->prod->print_mathml(G, H->hi, fout, nid);
-        else {
+        } else {
             char tipo = H->hi->pt->getMLtype(H->hi->clase);
             char *clase = H->hi->pt->getTeX(H->hi->clase);
 
@@ -593,9 +594,9 @@ void ProductionVe::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid)
                     tipo, inkid, clase, tipo);
         }
 
-        if (!H->hd->pt)
+        if (!H->hd->pt) {
             H->hd->prod->print_mathml(G, H->hd, fout, nid);
-        else {
+        } else {
             char tipo = H->hd->pt->getMLtype(H->hd->clase);
             char *clase = H->hd->pt->getTeX(H->hd->clase);
 
@@ -608,12 +609,8 @@ void ProductionVe::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid)
                     tipo, inkid, clase, tipo);
         }
         fprintf(fout, "</munder>\n");
-
     }
-
 }
-
-
 
 //
 //ProductionSSE methods
@@ -638,9 +635,9 @@ char ProductionSSE::tipo() {
 void ProductionSSE::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) {
     fprintf(fout, "<msubsup>\n");
 
-    if (!H->hi->hi->pt)
+    if (!H->hi->hi->pt) {
         H->hi->hi->prod->print_mathml(G, H->hi->hi, fout, nid);
-    else {
+    } else {
         char tipo = H->hi->hi->pt->getMLtype(H->hi->hi->clase);
         char *clase = H->hi->hi->pt->getTeX(H->hi->hi->clase);
         *nid = *nid + 1;
@@ -653,9 +650,9 @@ void ProductionSSE::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
                 tipo, inkid, clase, tipo);
     }
 
-    if (!H->hi->hd->pt)
+    if (!H->hi->hd->pt) {
         H->hi->hd->prod->print_mathml(G, H->hi->hd, fout, nid);
-    else {
+    } else {
         char tipo = H->hi->hd->pt->getMLtype(H->hi->hd->clase);
         char *clase = H->hi->hd->pt->getTeX(H->hi->hd->clase);
         *nid = *nid + 1;
@@ -668,9 +665,9 @@ void ProductionSSE::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
                 tipo, inkid, clase, tipo);
     }
 
-    if (!H->hd->pt)
+    if (!H->hd->pt) {
         H->hd->prod->print_mathml(G, H->hd, fout, nid);
-    else {
+    } else {
         char tipo = H->hd->pt->getMLtype(H->hd->clase);
         char *clase = H->hd->pt->getTeX(H->hd->clase);
         *nid = *nid + 1;
@@ -682,11 +679,8 @@ void ProductionSSE::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
         fprintf(fout, "<m%c xml:id=\"%s\">%s</m%c>\n",
                 tipo, inkid, clase, tipo);
     }
-
     fprintf(fout, "</msubsup>\n");
 }
-
-
 
 //
 //ProductionSup methods
@@ -718,8 +712,9 @@ void ProductionSup::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
         //evaluation escenario this must be removed
 
         Hypothesis *hip = H->hi;
-        while (!hip->pt && !hip->hd->pt && !hip->hd->hd->pt)
+        while (!hip->pt && !hip->hd->pt && !hip->hd->hd->pt) {
             hip = hip->hd;
+        }
 
         Hypothesis *closep = hip->hd->hd;
         Hypothesis *rest = hip->hd;
@@ -763,9 +758,9 @@ void ProductionSup::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
         }
 
         //subscript
-        if (!H->hi->hd->pt)
+        if (!H->hi->hd->pt) {
             H->hi->hd->prod->print_mathml(G, H->hi->hd, fout, nid);
-        else {
+        } else {
             char tipo = H->hi->hd->pt->getMLtype(H->hi->hd->clase);
             char *clase = H->hi->hd->pt->getTeX(H->hi->hd->clase);
             *nid = *nid + 1;
@@ -779,9 +774,9 @@ void ProductionSup::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
         }
 
         //superscript
-        if (!H->hd->pt)
+        if (!H->hd->pt) {
             H->hd->prod->print_mathml(G, H->hd, fout, nid);
-        else {
+        } else {
             char tipo = H->hd->pt->getMLtype(H->hd->clase);
             char *clase = H->hd->pt->getTeX(H->hd->clase);
             *nid = *nid + 1;
@@ -800,9 +795,9 @@ void ProductionSup::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
 
         fprintf(fout, "<msup>\n");
 
-        if (!H->hi->pt)
+        if (!H->hi->pt) {
             H->hi->prod->print_mathml(G, H->hi, fout, nid);
-        else {
+        } else {
             char tipo = H->hi->pt->getMLtype(H->hi->clase);
             char *clase = H->hi->pt->getTeX(H->hi->clase);
             *nid = *nid + 1;
@@ -815,9 +810,9 @@ void ProductionSup::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
                     tipo, inkid, clase, tipo);
         }
 
-        if (!H->hd->pt)
+        if (!H->hd->pt) {
             H->hd->prod->print_mathml(G, H->hd, fout, nid);
-        else {
+        } else {
             char tipo = H->hd->pt->getMLtype(H->hd->clase);
             char *clase = H->hd->pt->getTeX(H->hd->clase);
             *nid = *nid + 1;
@@ -832,10 +827,7 @@ void ProductionSup::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
 
         fprintf(fout, "</msup>\n");
     }
-
 }
-
-
 
 
 //
@@ -861,9 +853,9 @@ char ProductionSub::tipo() {
 void ProductionSub::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid) {
     fprintf(fout, "<msub>\n");
 
-    if (!H->hi->pt)
+    if (!H->hi->pt) {
         H->hi->prod->print_mathml(G, H->hi, fout, nid);
-    else {
+    } else {
         char tipo = H->hi->pt->getMLtype(H->hi->clase);
         char *clase = H->hi->pt->getTeX(H->hi->clase);
         *nid = *nid + 1;
@@ -876,9 +868,9 @@ void ProductionSub::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
                 tipo, inkid, clase, tipo);
     }
 
-    if (!H->hd->pt)
+    if (!H->hd->pt) {
         H->hd->prod->print_mathml(G, H->hd, fout, nid);
-    else {
+    } else {
         char tipo = H->hd->pt->getMLtype(H->hd->clase);
         char *clase = H->hd->pt->getTeX(H->hd->clase);
         *nid = *nid + 1;
@@ -893,8 +885,6 @@ void ProductionSub::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
 
     fprintf(fout, "</msub>\n");
 }
-
-
 
 
 //
@@ -929,9 +919,9 @@ void ProductionIns::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
         fprintf(fout, "<mroot xml:id=\"%s\">\n", inkid);
 
         //Sqrt content
-        if (!H->hd->pt)
+        if (!H->hd->pt) {
             H->hd->prod->print_mathml(G, H->hd, fout, nid);
-        else {
+        } else {
             char tipo = H->hd->pt->getMLtype(H->hd->clase);
             char *clase = H->hd->pt->getTeX(H->hd->clase);
             *nid = *nid + 1;
@@ -944,9 +934,9 @@ void ProductionIns::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
         }
 
         //sqrt index
-        if (!H->hi->hi->pt)
+        if (!H->hi->hi->pt) {
             H->hi->hi->prod->print_mathml(G, H->hi->hi, fout, nid);
-        else {
+        } else {
             char tipo = H->hi->hi->pt->getMLtype(H->hi->hi->clase);
             char *clase = H->hi->hi->pt->getTeX(H->hi->hi->clase);
             *nid = *nid + 1;
@@ -967,9 +957,9 @@ void ProductionIns::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
 
         fprintf(fout, "<msqrt xml:id=\"%s\">\n", inkid);
 
-        if (!H->hd->pt)
+        if (!H->hd->pt) {
             H->hd->prod->print_mathml(G, H->hd, fout, nid);
-        else {
+        } else {
             char tipo = H->hd->pt->getMLtype(H->hd->clase);
             char *clase = H->hd->pt->getTeX(H->hd->clase);
             *nid = *nid + 1;
@@ -984,8 +974,6 @@ void ProductionIns::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
         fprintf(fout, "</msqrt>\n");
     }
 }
-
-
 
 //
 //ProductionMrt methods
@@ -1016,9 +1004,9 @@ void ProductionMrt::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
 
     fprintf(fout, "<mroot xml:id=\"%s\">\n", inkid);
 
-    if (!H->hd->pt)
+    if (!H->hd->pt) {
         H->hd->prod->print_mathml(G, H->hd, fout, nid);
-    else {
+    } else {
         char tipo = H->hd->pt->getMLtype(H->hd->clase);
         char *clase = H->hd->pt->getTeX(H->hd->clase);
         *nid = *nid + 1;
@@ -1030,10 +1018,9 @@ void ProductionMrt::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
                 tipo, inkid, clase, tipo);
     }
 
-
-    if (!H->hi->hi->pt)
+    if (!H->hi->hi->pt) {
         H->hi->hi->prod->print_mathml(G, H->hi->hi, fout, nid);
-    else {
+    } else {
         char tipo = H->hd->pt->getMLtype(H->hi->hi->clase);
         char *clase = H->hd->pt->getTeX(H->hi->hi->clase);
         *nid = *nid + 1;
@@ -1045,10 +1032,8 @@ void ProductionMrt::print_mathml(Grammar *G, Hypothesis *H, FILE *fout, int *nid
                 tipo, inkid, clase, tipo);
     }
 
-
     fprintf(fout, "</mroot>\n");
 }
-
 
 
 //
@@ -1079,9 +1064,9 @@ ProductionT::~ProductionT() {
 
 void ProductionT::setClase(int k, float pr, char *tex, char mlt) {
     clases[k] = true;
-    if (texStr[k])
+    if (texStr[k]) {
         fprintf(stderr, "WARNING: Terminal %d redefined with label '%s'\n", k, tex);
-    else {
+    } else {
         texStr[k] = new char[strlen(tex) + 1];
         strcpy(texStr[k], tex);
         probs[k] = pr > 0.0 ? log(pr) : -FLT_MAX;
@@ -1112,9 +1097,11 @@ int ProductionT::getNoTerm() {
 void ProductionT::print() {
     int nc = 0;
 
-    for (int i = 0; i < N; i++)
-        if (clases[i])
+    for (int i = 0; i < N; i++) {
+        if (clases[i]) {
             nc++;
+        }
+    }
 
     printf("%d -> [%d clases]\n", S, nc);
 }

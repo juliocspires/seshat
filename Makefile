@@ -1,6 +1,6 @@
 CC=g++
 LINK=-lm
-FLAGS = -Wall -fpermissive #-I/path/to/boost/
+FLAGS = -std=c++11 -Wall -fpermissive #-I/path/to/boost/
 
 OBJFEAS=symfeatures.o featureson.o online.o
 OBJMUESTRA=sample.o stroke.o

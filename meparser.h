@@ -52,6 +52,7 @@ class meParser {
     void initCYKterms(Sample *m, TableCYK *tcyk, int N, int K);
 
     void combineStrokes(Sample *M, TableCYK *tcyk, LogSpace **LSP, int N);
+    void process_CYK(int talla, TableCYK *tcyk, Sample *M, LogSpace **logspace);
     CellCYK* fusion(Sample *M, ProductionB *pd, Hypothesis *A, Hypothesis *B, int N, double prob);
 
 public:

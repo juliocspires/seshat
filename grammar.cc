@@ -63,8 +63,9 @@ Grammar::Grammar(char *path, SymRec *sr) {
 
     //Get the path's prefix to determine relative locations
     int i = strlen(path) - 1;
-    while (i >= 0 && path[i] != '/')
+    while (i >= 0 && path[i] != '/') {
         i--;
+    }
 
     path[i + 1] = 0;
 
@@ -76,16 +77,19 @@ Grammar::Grammar(char *path, SymRec *sr) {
     fclose(fd);
 
     esInit = new bool[noTerminales.size()];
-    for (int i = 0; i < (int) noTerminales.size(); i++)
+    for (int i = 0; i < (int) noTerminales.size(); i++) {
         esInit[i] = false;
+    }
 
-    for (list<int>::iterator it = initsyms.begin(); it != initsyms.end(); it++)
+    for (list<int>::iterator it = initsyms.begin(); it != initsyms.end(); it++) {
         esInit[ *it ] = true;
+    }
 }
 
 void Grammar::addInitSym(char *str) {
-    if (noTerminales.find(str) == noTerminales.end())
+    if (noTerminales.find(str) == noTerminales.end()) {
         error("addInitSym: Non-terminal '%s' not defined.", str);
+    }
 
     initsyms.push_back(noTerminales[str]);
 }
@@ -96,18 +100,20 @@ void Grammar::addNoTerminal(char *str) {
 }
 
 void Grammar::addTerminal(float pr, char *S, char *T, char *tex) {
-    if (noTerminales.find(S) == noTerminales.end())
+    if (noTerminales.find(S) == noTerminales.end()) {
         error("addTerminal: Non-terminal '%s' not defined.", S);
+    }
 
     bool create = true;
     for (list<ProductionT *>::iterator it = prodTerms.begin(); it != prodTerms.end(); it++)
         if ((*it)->getNoTerm() == noTerminales[S]) {
 
             int id = sym_rec->keyClase(T);
-            if (id >= 0)
+            if (id >= 0) {
                 (*it)->setClase(id, pr, tex, 'i');
-            else
+            } else {
                 fprintf(stderr, "ERROR: %s -> %s (id < 0)\n", S, T);
+            }
 
             create = false;
             break;
@@ -117,10 +123,11 @@ void Grammar::addTerminal(float pr, char *S, char *T, char *tex) {
         ProductionT *pt = new ProductionT(noTerminales[S], sym_rec->getNClases());
 
         int id = sym_rec->keyClase(T);
-        if (id >= 0)
+        if (id >= 0) {
             pt->setClase(id, pr, tex, 'i');
-        else
+        } else {
             fprintf(stderr, "ERROR: %s -> %s (id < 0)\n", S, T);
+        }
 
         prodTerms.push_back(pt);
     }
@@ -286,8 +293,9 @@ Grammar::~Grammar() {
 
 const char *Grammar::key2str(int k) {
     for (map<string, int>::iterator it = noTerminales.begin(); it != noTerminales.end(); it++) {
-        if (it->second == k)
+        if (it->second == k) {
             return it->first.c_str();
+        }
     }
     return "NULL";
 }

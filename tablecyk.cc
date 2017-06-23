@@ -20,13 +20,22 @@
 #include <algorithm>
 
 bool operator<(const coo &A, const coo &B) {
-    if (A.x < B.x) return true;
+    if (A.x < B.x) {
+        return true;
+    }
     if (A.x == B.x) {
-        if (A.y < B.y) return true;
+        if (A.y < B.y) {
+            return true;
+        }
         if (A.y == B.y) {
-            if (A.s < B.s) return true;
-            if (A.s == B.s)
-                if (A.t < B.t) return true;
+            if (A.s < B.s) {
+                return true;
+            }
+            if (A.s == B.s) {
+                if (A.t < B.t) {
+                    return true;
+                }
+            }
         }
     }
     return false;
@@ -41,20 +50,21 @@ TableCYK::TableCYK(int n, int k) {
     pm_comps = 0.0;
 
     T = new CellCYK *[N];
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < N; i++) {
         T[i] = NULL;
+    }
 
     TS = new map<coo, CellCYK*>[N];
 }
 
 TableCYK::~TableCYK() {
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < N; i++) {
         while (T[i]) {
             CellCYK *aux = T[i]->sig;
             delete T[i];
             T[i] = aux;
         }
-
+    }
     delete[] T;
     delete[] TS;
 }
@@ -74,9 +84,11 @@ int TableCYK::size(int n) {
 void TableCYK::updateTarget(coo *K, Hypothesis *H) {
     int pcomps = 0;
 
-    for (int i = 0; i < H->parent->nc; i++)
-        if (H->parent->ccc[i])
+    for (int i = 0; i < H->parent->nc; i++) {
+        if (H->parent->ccc[i]) {
             pcomps++;
+        }
+    }
 
     if (pcomps > pm_comps || (pcomps == pm_comps && H->pr > Target->pr)) {
         Target->copy(H);
@@ -97,14 +109,16 @@ void TableCYK::add(int n, CellCYK *celda, int noterm_id, bool *esinit) {
         TS[n - 1][key] = celda;
 
         if (noterm_id >= 0) {
-            if (esinit[noterm_id])
+            if (esinit[noterm_id]) {
                 updateTarget(&key, celda->noterm[noterm_id]);
+            }
         } else {
 
-            for (int nt = 0; nt < celda->nnt; nt++)
-                if (celda->noterm[nt] && esinit[nt])
+            for (int nt = 0; nt < celda->nnt; nt++) {
+                if (celda->noterm[nt] && esinit[nt]) {
                     updateTarget(&key, celda->noterm[nt]);
-
+                }
+            }
         }
     } else { //Maximize probability avoiding duplicates
 
@@ -123,21 +137,26 @@ void TableCYK::add(int n, CellCYK *celda, int noterm_id, bool *esinit) {
             //The cells cover the same region with a different set of strokes
 
             float maxpr_c = -FLT_MAX;
-            for (int i = VA; i < VB; i++)
-                if (celda->noterm[i] && celda->noterm[i]->pr > maxpr_c)
+            for (int i = VA; i < VB; i++) {
+                if (celda->noterm[i] && celda->noterm[i]->pr > maxpr_c) {
                     maxpr_c = celda->noterm[i]->pr;
+                }
+            }
 
             float maxpr_r = -FLT_MAX;
-            for (int i = 0; i < r->nnt; i++)
-                if (r->noterm[i] && r->noterm[i]->pr > maxpr_r)
+            for (int i = 0; i < r->nnt; i++) {
+                if (r->noterm[i] && r->noterm[i]->pr > maxpr_r) {
                     maxpr_r = r->noterm[i]->pr;
+                }
+            }
 
             //If the new cell contains the most likely hypothesis, replace the hypotheses
             if (maxpr_c > maxpr_r) {
 
                 //Copy the new set of strokes
-                for (int i = 0; i < celda->nc; i++)
+                for (int i = 0; i < celda->nc; i++) {
                     r->ccc[i] = celda->ccc[i];
+                }
 
                 //Replace the hypotheses for each non-terminal
                 for (int i = 0; i < celda->nnt; i++)
@@ -147,8 +166,9 @@ void TableCYK::add(int n, CellCYK *celda, int noterm_id, bool *esinit) {
                             r->noterm[i]->copy(celda->noterm[i]);
                             r->noterm[i]->parent = r;
 
-                            if (esinit[i])
+                            if (esinit[i]) {
                                 updateTarget(&key, r->noterm[i]);
+                            }
                         } else {
                             r->noterm[i] = celda->noterm[i];
                             r->noterm[i]->parent = r;
@@ -156,15 +176,15 @@ void TableCYK::add(int n, CellCYK *celda, int noterm_id, bool *esinit) {
                             //Set to NULL such that the "delete celda" doesn't delete the hypothesis
                             celda->noterm[i] = NULL;
 
-                            if (esinit[i])
+                            if (esinit[i]) {
                                 updateTarget(&key, r->noterm[i]);
+                            }
                         }
 
                     } else if (r->noterm[i]) {
                         delete r->noterm[i];
                         r->noterm[i] = NULL;
                     }
-
             }
 
             delete celda;
@@ -172,7 +192,6 @@ void TableCYK::add(int n, CellCYK *celda, int noterm_id, bool *esinit) {
             //Finished
             return;
         }
-
 
         for (int i = VA; i < VB; i++) {
 
@@ -184,8 +203,9 @@ void TableCYK::add(int n, CellCYK *celda, int noterm_id, bool *esinit) {
                         r->noterm[i]->copy(celda->noterm[i]);
                         r->noterm[i]->parent = r;
 
-                        if (esinit[i])
+                        if (esinit[i]) {
                             updateTarget(&key, r->noterm[i]);
+                        }
                     }
 
                 } else {
@@ -195,14 +215,13 @@ void TableCYK::add(int n, CellCYK *celda, int noterm_id, bool *esinit) {
                     //Set to NULL such that the "delete celda" doesn't delete the hypothesis
                     celda->noterm[i] = NULL;
 
-                    if (esinit[i])
+                    if (esinit[i]) {
                         updateTarget(&key, r->noterm[i]);
+                    }
                 }
             }
-
         }
 
         delete celda;
     }
-
 }

@@ -79,8 +79,9 @@ meParser::meParser(char *conf) {
         } else if (!strcmp(auxstr, "SegmentationSF")) {
             fscanf(fconfig, "%s", auxstr);
             gfactor = atof(auxstr);
-        } else
+        } else {
             fscanf(fconfig, "%s", auxstr); //Info
+        }
 
         fscanf(fconfig, "%s", auxstr); //Next field id
     }
@@ -132,8 +133,9 @@ meParser::meParser(char *conf) {
     fscanf(fconfig, "%s", path);
 
     //Remove the last \n character
-    if (path[strlen(path) - 1] == '\n')
+    if (path[strlen(path) - 1] == '\n') {
         path[strlen(path) - 1] = '\0';
+    }
 
     fclose(fconfig);
 
@@ -164,12 +166,13 @@ void meParser::loadSymRec(char *config) {
 
     fscanf(fd, "%s", auxstr);
     while (!feof(fd)) {
-        if (!strcmp(auxstr, "Duration"))
+        if (!strcmp(auxstr, "Duration")) {
             fscanf(fd, "%s", dur_path);
-        else if (!strcmp(auxstr, "Segmentation"))
+        } else if (!strcmp(auxstr, "Segmentation")) {
             fscanf(fd, "%s", seg_path);
-        else
+        } else {
             fscanf(fd, "%s", auxstr); //Info
+        }
 
         fscanf(fd, "%s", auxstr); //Next field id
     }
@@ -227,10 +230,11 @@ void meParser::initCYKterms(Sample *M, TableCYK *tcyk, int N, int K) {
                             + dfactor * log(duration->prob(clase[k], 1));
 
                     if (cd->noterm[prod->getNoTerm()]) {
-                        if (cd->noterm[prod->getNoTerm()]->pr > prob + prod->getPrior(clase[k]))
+                        if (cd->noterm[prod->getNoTerm()]->pr > prob + prod->getPrior(clase[k])) {
                             continue;
-                        else
+                        } else {
                             delete cd->noterm[prod->getNoTerm()];
+                        }
                     }
 
                     insertar = true;
@@ -250,7 +254,6 @@ void meParser::initCYKterms(Sample *M, TableCYK *tcyk, int N, int K) {
                     cd->noterm[prod->getNoTerm()]->lcen = cen;
                     cd->noterm[prod->getNoTerm()]->rcen = cen;
                 }
-
         }
 
         if (insertar) {
@@ -264,14 +267,16 @@ void meParser::initCYKterms(Sample *M, TableCYK *tcyk, int N, int K) {
 
             //Add to parsing table (size=1)
             tcyk->add(1, cd, -1, G->esInit);
-        } else
+        } else {
             delete cd;
+        }
     }
-
 }
 
 void meParser::combineStrokes(Sample *M, TableCYK *tcyk, LogSpace **LSP, int N) {
-    if (N <= 1) return;
+    if (N <= 1) {
+        return;
+    }
 
     int asc, cmy, des;
     int clase[NB];
@@ -294,20 +299,24 @@ void meParser::combineStrokes(Sample *M, TableCYK *tcyk, LogSpace **LSP, int N) 
             //Add close and visible strokes to the closer list
             if (size == 2) {
 
-                for (int i = 0; i < stkc1; i++)
-                    if (M->getDist(stkc1, i) < distance_th)
+                for (int i = 0; i < stkc1; i++) {
+                    if (M->getDist(stkc1, i) < distance_th) {
                         close_list.push_back(i);
-
-            } else
+                    }
+                }
+            } else {
                 M->get_close_strokes(stkc1, &close_list, distance_th);
+            }
 
             //If there are not enough strokes to compose a hypothesis of "size", continue
-            if ((int) close_list.size() < size - 1)
+            if ((int) close_list.size() < size - 1) {
                 continue;
+            }
 
             int *stkvec = new int[close_list.size()], VS = 0;
-            for (list<int>::iterator it = close_list.begin(); it != close_list.end(); it++)
+            for (list<int>::iterator it = close_list.begin(); it != close_list.end(); it++) {
                 stkvec[VS++] = *it;
+            }
 
             sort(stkvec, stkvec + VS);
 
@@ -319,8 +328,9 @@ void meParser::combineStrokes(Sample *M, TableCYK *tcyk, LogSpace **LSP, int N) 
                 stks_list.push_back(stkc1);
 
                 //Add strokes up to size
-                for (int j = i - (size - 2); j < i; j++)
+                for (int j = i - (size - 2); j < i; j++) {
                     stks_list.push_back(stkvec[j]);
+                }
 
                 //Sort list (stroke's order is important in online classification)
                 stks_list.sort();
@@ -330,8 +340,9 @@ void meParser::combineStrokes(Sample *M, TableCYK *tcyk, LogSpace **LSP, int N) 
 
                 //Print hypothesis information
                 printf("Multi-stroke (%d) hypothesis: {", size);
-                for (list<int>::iterator it = stks_list.begin(); it != stks_list.end(); it++)
+                for (list<int>::iterator it = stks_list.begin(); it != stks_list.end(); it++) {
                     printf(" %d", *it);
+                }
                 printf(" }\n");
 
                 float seg_prob = segmentation->prob(cd, M);
@@ -355,10 +366,11 @@ void meParser::combineStrokes(Sample *M, TableCYK *tcyk, LogSpace **LSP, int N) 
                                     + gfactor * log(seg_prob);
 
                             if (cd->noterm[prod->getNoTerm()]) {
-                                if (cd->noterm[prod->getNoTerm()]->pr > prob)
+                                if (cd->noterm[prod->getNoTerm()]->pr > prob) {
                                     continue;
-                                else
+                                } else {
                                     delete cd->noterm[prod->getNoTerm()];
+                                }
                             }
 
                             insertar = true;
@@ -379,7 +391,6 @@ void meParser::combineStrokes(Sample *M, TableCYK *tcyk, LogSpace **LSP, int N) 
                 }
 
                 if (insertar) {
-
                     for (int j = 0; j < cd->nnt; j++) {
                         if (cd->noterm[j]) {
                             printf("%12s [%s] %g\n", sym_rec->strClase(cd->noterm[j]->clase),
@@ -387,10 +398,9 @@ void meParser::combineStrokes(Sample *M, TableCYK *tcyk, LogSpace **LSP, int N) 
                         }
                     }
                     tcyk->add(size, cd, -1, G->esInit);
-
-                } else
+                } else {
                     delete cd;
-
+                }
             }//end for close_list (VS)
 
             delete[] stkvec;
@@ -398,18 +408,16 @@ void meParser::combineStrokes(Sample *M, TableCYK *tcyk, LogSpace **LSP, int N) 
         }//end for size
 
     }//end for stroke stkc1
-
 }
-
-
 
 //Combine hypotheses A and B to create new hypothesis S using production 'S -> A B'
 
 CellCYK *meParser::fusion(Sample *M, ProductionB *pd, Hypothesis *A, Hypothesis *B, int N, double prob) {
     CellCYK *S = NULL;
 
-    if (!A->parent->compatible(B->parent) || pd->prior == -FLT_MAX)
+    if (!A->parent->compatible(B->parent) || pd->prior == -FLT_MAX) {
         return S;
+    }
 
     //Penalty according to distance between strokes
     float grpen;
@@ -418,14 +426,16 @@ CellCYK *meParser::fusion(Sample *M, ProductionB *pd, Hypothesis *A, Hypothesis 
 
         grpen = M->group_penalty(A->parent, B->parent);
         //If distance is infinity -> not visible
-        if (grpen >= M->INF_DIST)
+        if (grpen >= M->INF_DIST) {
             return NULL;
+        }
 
         //Compute penalty
         grpen = 1.0 / (1.0 + grpen);
         grpen = pow(grpen, clusterF);
-    } else
+    } else {
         grpen = 1.0;
+    }
 
     //Get nonterminal
     int ps = pd->S;
@@ -436,7 +446,7 @@ CellCYK *meParser::fusion(Sample *M, ProductionB *pd, Hypothesis *A, Hypothesis 
     //Compute the (log)probability
     prob = pbfactor * pd->prior + rfactor * log(prob * grpen) + A->pr + B->pr;
 
-    //Copute resulting region
+    //Compute resulting region
     S->x = min(A->parent->x, B->parent->x);
     S->y = min(A->parent->y, B->parent->y);
     S->s = max(A->parent->s, B->parent->s);
@@ -446,8 +456,9 @@ CellCYK *meParser::fusion(Sample *M, ProductionB *pd, Hypothesis *A, Hypothesis 
     S->ccUnion(A->parent, B->parent);
 
     int clase = -1;
-    if (!pd->check_out() && sym_rec->checkClase(pd->get_outstr()))
+    if (!pd->check_out() && sym_rec->checkClase(pd->get_outstr())) {
         clase = sym_rec->keyClase(pd->get_outstr());
+    }
 
     //Create hypothesis
     S->noterm[ps] = new Hypothesis(clase, prob, S, ps);
@@ -470,7 +481,6 @@ CellCYK *meParser::fusion(Sample *M, ProductionB *pd, Hypothesis *A, Hypothesis 
             }
         }
     }
-
     return S;
 }
 
@@ -498,8 +508,6 @@ void meParser::parse_me(Sample *M) {
 
     //Spatial structure for retrieving hypotheses within a certain region
     LogSpace **logspace = new LogSpace*[N];
-    list<CellCYK*> c1setH, c1setV, c1setU, c1setI, c1setM, c1setS;
-    SpaRel SPR(gmm_spr, M);
 
     //Init spatial space for size 1
     logspace[1] = new LogSpace(tcyk.get(1), tcyk.size(1), M->RX, M->RY);
@@ -513,345 +521,7 @@ void meParser::parse_me(Sample *M) {
     //CYK algorithm main loop
     for (int talla = 2; talla <= N; talla++) {
 
-        for (int a = 1; a < talla; a++) {
-            int b = talla - a;
-
-            for (CellCYK *c1 = tcyk.get(a); c1; c1 = c1->sig) {
-                //Clear lists
-                c1setH.clear();
-                c1setV.clear();
-                c1setU.clear();
-                c1setI.clear();
-                c1setM.clear();
-                c1setS.clear();
-
-                //Get the subset of regions close to c1 according to different spatial relations
-                logspace[b]->getH(c1, &c1setH); //Horizontal (right)
-                logspace[b]->getV(c1, &c1setV); //Vertical (down)
-                logspace[b]->getU(c1, &c1setU); //Vertical (up)
-                logspace[b]->getI(c1, &c1setI); //Inside (sqrt)
-                logspace[b]->getM(c1, &c1setM); //mroot (sqrt[i])
-
-                for (list<CellCYK*>::iterator c2 = c1setH.begin(); c2 != c1setH.end(); c2++) {
-
-                    for (list<ProductionB*>::iterator it = G->prodsH.begin(); it != G->prodsH.end(); it++) {
-                        if ((*it)->prior == -FLT_MAX) continue;
-
-                        //Production S -> A B
-                        int ps = ((ProductionB*) * it)->S;
-                        int pa = ((ProductionB*) * it)->A;
-                        int pb = ((ProductionB*) * it)->B;
-
-                        if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
-                            double cdpr = SPR.getHorProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
-                            if (cdpr <= 0.0) continue;
-
-                            CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
-
-                            if (!cd) continue;
-
-                            if (cd->noterm[ps]) {
-                                tcyk.add(talla, cd, ps, G->esInit); //Add to parsing table (size=talla)
-                            } else {
-                                tcyk.add(talla, cd, -1, G->esInit); //Add to parsing table
-                            }
-                        }
-                    }
-
-                    for (list<ProductionB*>::iterator it = G->prodsSup.begin(); it != G->prodsSup.end(); it++) {
-                        if ((*it)->prior == -FLT_MAX) continue;
-
-                        //Production S -> A B
-                        int ps = ((ProductionB*) * it)->S;
-                        int pa = ((ProductionB*) * it)->A;
-                        int pb = ((ProductionB*) * it)->B;
-
-                        if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
-                            double cdpr = SPR.getSupProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
-                            if (cdpr <= 0.0) continue;
-
-                            CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
-
-                            if (!cd) continue;
-
-                            if (cd->noterm[ps]) {
-                                tcyk.add(talla, cd, ps, G->esInit); //Add to parsing table
-                            } else {
-                                tcyk.add(talla, cd, -1, G->esInit); //Add to parsing table
-                            }
-
-                        }
-                    }
-
-
-                    for (list<ProductionB*>::iterator it = G->prodsSub.begin(); it != G->prodsSub.end(); it++) {
-                        if ((*it)->prior == -FLT_MAX) continue;
-
-                        //Production S -> A B
-                        int ps = ((ProductionB*) * it)->S;
-                        int pa = ((ProductionB*) * it)->A;
-                        int pb = ((ProductionB*) * it)->B;
-
-                        if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
-                            double cdpr = SPR.getSubProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
-                            if (cdpr <= 0.0) continue;
-
-                            CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
-
-                            if (!cd) continue;
-
-                            if (cd->noterm[ps]) {
-                                tcyk.add(talla, cd, ps, G->esInit); //Add to parsing table
-                            } else {
-                                tcyk.add(talla, cd, -1, G->esInit); //Add to parsing table
-                            }
-
-
-                        }
-                    }
-
-                }//end c2=c1setH
-
-                for (list<CellCYK*>::iterator c2 = c1setV.begin(); c2 != c1setV.end(); c2++) {
-
-                    for (list<ProductionB*>::iterator it = G->prodsV.begin(); it != G->prodsV.end(); it++) {
-                        if ((*it)->prior == -FLT_MAX) continue;
-
-                        //Production S -> A B
-                        int ps = ((ProductionB*) * it)->S;
-                        int pa = ((ProductionB*) * it)->A;
-                        int pb = ((ProductionB*) * it)->B;
-
-                        if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
-                            double cdpr = SPR.getVerProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
-                            if (cdpr <= 0.0) continue;
-
-                            CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
-
-                            if (!cd) continue;
-
-                            if (cd->noterm[ps])
-                                tcyk.add(talla, cd, ps, G->esInit); //Add to parsing table
-                            else
-                                tcyk.add(talla, cd, -1, G->esInit); //Add to parsing table
-                        }
-                    }
-
-                    //prodsVe
-                    for (list<ProductionB*>::iterator it = G->prodsVe.begin(); it != G->prodsVe.end(); it++) {
-                        if ((*it)->prior == -FLT_MAX) continue;
-
-                        //Production S -> A B
-                        int ps = ((ProductionB*) * it)->S;
-                        int pa = ((ProductionB*) * it)->A;
-                        int pb = ((ProductionB*) * it)->B;
-
-                        if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
-                            double cdpr = SPR.getVerProb(c1->noterm[pa], (*c2)->noterm[ pb ], true);
-                            if (cdpr <= 0.0) continue;
-
-                            CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
-
-                            if (!cd) continue;
-
-                            if (cd->noterm[ps]) {
-                                tcyk.add(talla, cd, ps, G->esInit); //Add to parsing table
-                            } else {
-                                tcyk.add(talla, cd, -1, G->esInit); //Add to parsing table
-                            }
-
-                        }
-                    }
-
-                }//for in c1setV
-
-
-                for (list<CellCYK*>::iterator c2 = c1setU.begin(); c2 != c1setU.end(); c2++) {
-
-                    for (list<ProductionB*>::iterator it = G->prodsV.begin(); it != G->prodsV.end(); it++) {
-                        if ((*it)->prior == -FLT_MAX) continue;
-
-                        //Production S -> A B
-                        int ps = ((ProductionB*) * it)->S;
-                        int pa = ((ProductionB*) * it)->A;
-                        int pb = ((ProductionB*) * it)->B;
-
-                        if (c1->noterm[ pb ] && (*c2)->noterm[ pa ]) {
-                            double cdpr = SPR.getVerProb((*c2)->noterm[pa], c1->noterm[ pb ]);
-                            if (cdpr <= 0.0) continue;
-
-                            CellCYK *cd = fusion(M, *it, (*c2)->noterm[ pa ], c1->noterm[ pb ], M->nStrokes(), cdpr);
-
-                            if (!cd) continue;
-
-                            if (cd->noterm[ps]) {
-                                tcyk.add(talla, cd, ps, G->esInit); //Add to parsing table
-                            } else {
-                                tcyk.add(talla, cd, -1, G->esInit); //Add to parsing table
-                            }
-
-                        }
-                    }
-
-
-                    //ProdsVe
-                    for (list<ProductionB*>::iterator it = G->prodsVe.begin(); it != G->prodsVe.end(); it++) {
-                        if ((*it)->prior == -FLT_MAX) continue;
-
-                        //Production S -> A B
-                        int ps = ((ProductionB*) * it)->S;
-                        int pa = ((ProductionB*) * it)->A;
-                        int pb = ((ProductionB*) * it)->B;
-
-                        if (c1->noterm[ pb ] && (*c2)->noterm[ pa ]) {
-                            double cdpr = SPR.getVerProb((*c2)->noterm[pa], c1->noterm[ pb ], true);
-                            if (cdpr <= 0.0) continue;
-
-                            CellCYK *cd = fusion(M, *it, (*c2)->noterm[ pa ], c1->noterm[ pb ], M->nStrokes(), cdpr);
-
-                            if (!cd) continue;
-
-                            if (cd->noterm[ps]) {
-                                tcyk.add(talla, cd, ps, G->esInit); //Add to parsing table
-                            } else {
-                                tcyk.add(talla, cd, -1, G->esInit); //Add to parsing table
-                            }
-
-                        }
-                    }
-
-                }
-
-                for (list<CellCYK*>::iterator c2 = c1setI.begin(); c2 != c1setI.end(); c2++) {
-
-                    for (list<ProductionB*>::iterator it = G->prodsIns.begin(); it != G->prodsIns.end(); it++) {
-                        if ((*it)->prior == -FLT_MAX) continue;
-
-                        //Production S -> A B
-                        int ps = ((ProductionB*) * it)->S;
-                        int pa = ((ProductionB*) * it)->A;
-                        int pb = ((ProductionB*) * it)->B;
-
-                        if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
-                            double cdpr = SPR.getInsProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
-                            if (cdpr <= 0.0) continue;
-
-                            CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
-
-                            if (!cd) continue;
-
-                            if (cd->noterm[ps]) {
-                                tcyk.add(talla, cd, ps, G->esInit); //Add to parsing table
-                            } else {
-                                tcyk.add(talla, cd, -1, G->esInit); //Add to parsing table
-                            }
-
-                        }
-                    }
-                }
-
-
-                //Mroot
-                for (list<CellCYK*>::iterator c2 = c1setM.begin(); c2 != c1setM.end(); c2++) {
-
-                    for (list<ProductionB*>::iterator it = G->prodsMrt.begin(); it != G->prodsMrt.end(); it++) {
-                        if ((*it)->prior == -FLT_MAX) continue;
-
-                        //Production S -> A B
-                        int ps = ((ProductionB*) * it)->S;
-                        int pa = ((ProductionB*) * it)->A;
-                        int pb = ((ProductionB*) * it)->B;
-
-                        if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
-                            double cdpr = SPR.getMrtProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
-                            if (cdpr <= 0.0) continue;
-
-                            CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
-
-                            if (!cd) continue;
-
-                            if (cd->noterm[ps]) {
-                                tcyk.add(talla, cd, ps, G->esInit); //Add to parsing table
-                            } else {
-                                tcyk.add(talla, cd, -1, G->esInit); //Add to parsing table
-                            }
-
-                        }
-                    }
-                }
-                //End Mroot
-
-
-                //Look for combining {x_subs} y {x^sups} in {x_subs^sups}
-                for (int pps = 0; pps < c1->nnt; pps++) {
-
-                    //If c1->noterm[pa] is a Hypothesis of a subscript (parent_son)
-                    if (c1->noterm[pps] && c1->noterm[pps]->prod && c1->noterm[pps]->prod->tipo() == 'B') {
-
-                        logspace[b + c1->noterm[pps]->hi->parent->talla]->getS(c1, &c1setS); //sup/sub-scripts union
-
-                        for (list<CellCYK*>::iterator c2 = c1setS.begin(); c2 != c1setS.end(); c2++) {
-
-                            if ((*c2)->x == c1->x && c1 != *c2) {
-
-                                for (list<ProductionB*>::iterator it = G->prodsSSE.begin(); it != G->prodsSSE.end(); it++) {
-                                    if ((*it)->prior == -FLT_MAX) continue;
-
-                                    //Production S -> A B
-                                    int ps = ((ProductionB*) * it)->S;
-                                    int pa = ((ProductionB*) * it)->A;
-                                    int pb = ((ProductionB*) * it)->B;
-
-                                    if (c1->noterm[pa] && (*c2)->noterm[pb]
-                                            && c1->noterm[pa]->prod && (*c2)->noterm[pb]->prod
-                                            && c1->noterm[pa]->hi == (*c2)->noterm[pb]->hi
-                                            && c1->noterm[pa]->prod->tipo() == 'B'
-                                            && (*c2)->noterm[pb]->prod->tipo() == 'P'
-                                            && c1->noterm[pa]->hd->parent->compatible((*c2)->noterm[pb]->hd->parent)) {
-
-
-                                        //Subscript and superscript should start almost vertically aligned
-                                        if (abs(c1->noterm[pa]->hd->parent->x - (*c2)->noterm[pb]->hd->parent->x) > 3 * M->RX) continue;
-                                        //Subscript and superscript should not overlap
-                                        if (max((*it)->solape(c1->noterm[pa]->hd, (*c2)->noterm[pb]->hd),
-                                                (*it)->solape((*c2)->noterm[pb]->hd, c1->noterm[pa]->hd)) > 0.1) continue;
-
-                                        float prob = c1->noterm[pa]->pr + (*c2)->noterm[pb]->pr - c1->noterm[pa]->hi->pr;
-
-                                        CellCYK *cd = new CellCYK(G->noTerminales.size(), M->nStrokes());
-
-                                        cd->x = min(c1->x, (*c2)->x);
-                                        cd->y = min(c1->y, (*c2)->y);
-                                        cd->s = max(c1->s, (*c2)->s);
-                                        cd->t = max(c1->t, (*c2)->t);
-
-                                        cd->noterm[ ps ] = new Hypothesis(-1, prob, cd, ps);
-
-                                        cd->noterm[ ps ]->lcen = c1->noterm[pa]->lcen;
-                                        cd->noterm[ ps ]->rcen = c1->noterm[pa]->rcen;
-                                        cd->ccUnion(c1, (*c2));
-
-                                        cd->noterm[ ps ]->hi = c1->noterm[pa];
-                                        cd->noterm[ ps ]->hd = (*c2)->noterm[pb]->hd;
-                                        cd->noterm[ ps ]->prod = *it;
-                                        //Save the production of the superscript in order to recover it when printing the used productions
-                                        cd->noterm[ ps ]->prod_sse = (*c2)->noterm[pb]->prod;
-
-                                        tcyk.add(talla, cd, ps, G->esInit);
-                                    }
-                                }
-                            }
-
-                        }//end for c2 in c1setS
-
-                        c1setS.clear();
-                    }
-                }//end for(int pps=0; pps<c1->nnt; pps++)
-
-
-            } //end for(CellCYK *c1=tcyk.get(a); c1; c1=c1->sig)
-
-        } //for 1 <= a < talla
+        process_CYK(talla, &tcyk, M, logspace);
 
         if (talla < N) {
             //Create new logspace structure of size "talla"
@@ -872,10 +542,10 @@ void meParser::parse_me(Sample *M) {
 
     } //for 2 <= talla <= N
 
-
     //Free memory
-    for (int i = 1; i < N; i++)
+    for (int i = 1; i < N; i++) {
         delete logspace[i];
+    }
     delete[] logspace;
 
     //Get Most Likely Hypothesis
@@ -898,14 +568,348 @@ void meParser::parse_me(Sample *M) {
     //Save InkML file of the recognized expression
     M->printInkML(G, mlh);
 
-    if (M->getOutDot())
+    if (M->getOutDot()) {
         save_dot(mlh, M->getOutDot());
+    }
 }
 
 /*************************************
 End Parsing Math Expression
  *************************************/
 
+
+void meParser::process_CYK(int talla, TableCYK *tcyk, Sample *M, LogSpace **logspace) {
+    list<CellCYK*> c1setH, c1setV, c1setU, c1setI, c1setM, c1setS;
+    SpaRel SPR(gmm_spr, M);
+
+    for (int a = 1; a < talla; a++) {
+        int b = talla - a;
+
+        for (CellCYK *c1 = tcyk->get(a); c1; c1 = c1->sig) {
+            //Clear lists
+            c1setH.clear();
+            c1setV.clear();
+            c1setU.clear();
+            c1setI.clear();
+            c1setM.clear();
+            c1setS.clear();
+
+            //Get the subset of regions close to c1 according to different spatial relations
+            logspace[b]->getH(c1, &c1setH); //Horizontal (right)
+            logspace[b]->getV(c1, &c1setV); //Vertical (down)
+            logspace[b]->getU(c1, &c1setU); //Vertical (up)
+            logspace[b]->getI(c1, &c1setI); //Inside (sqrt)
+            logspace[b]->getM(c1, &c1setM); //mroot (sqrt[i])
+
+            for (list<CellCYK*>::iterator c2 = c1setH.begin(); c2 != c1setH.end(); c2++) {
+
+                for (list<ProductionB*>::iterator it = G->prodsH.begin(); it != G->prodsH.end(); it++) {
+                    if ((*it)->prior == -FLT_MAX) continue;
+
+                    //Production S -> A B
+                    int ps = ((ProductionB*) * it)->S;
+                    int pa = ((ProductionB*) * it)->A;
+                    int pb = ((ProductionB*) * it)->B;
+
+                    if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
+                        double cdpr = SPR.getHorProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
+                        if (cdpr <= 0.0) continue;
+
+                        CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
+
+                        if (!cd) continue;
+
+                        if (cd->noterm[ps]) {
+                            tcyk->add(talla, cd, ps, G->esInit); //Add to parsing table (size=talla)
+                        } else {
+                            tcyk->add(talla, cd, -1, G->esInit); //Add to parsing table
+                        }
+                    }
+                }
+
+                for (list<ProductionB*>::iterator it = G->prodsSup.begin(); it != G->prodsSup.end(); it++) {
+                    if ((*it)->prior == -FLT_MAX) continue;
+
+                    //Production S -> A B
+                    int ps = ((ProductionB*) * it)->S;
+                    int pa = ((ProductionB*) * it)->A;
+                    int pb = ((ProductionB*) * it)->B;
+
+                    if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
+                        double cdpr = SPR.getSupProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
+                        if (cdpr <= 0.0) continue;
+
+                        CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
+
+                        if (!cd) continue;
+
+                        if (cd->noterm[ps]) {
+                            tcyk->add(talla, cd, ps, G->esInit); //Add to parsing table
+                        } else {
+                            tcyk->add(talla, cd, -1, G->esInit); //Add to parsing table
+                        }
+                    }
+                }
+
+                for (list<ProductionB*>::iterator it = G->prodsSub.begin(); it != G->prodsSub.end(); it++) {
+                    if ((*it)->prior == -FLT_MAX) continue;
+
+                    //Production S -> A B
+                    int ps = ((ProductionB*) * it)->S;
+                    int pa = ((ProductionB*) * it)->A;
+                    int pb = ((ProductionB*) * it)->B;
+
+                    if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
+                        double cdpr = SPR.getSubProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
+                        if (cdpr <= 0.0) continue;
+
+                        CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
+
+                        if (!cd) continue;
+
+                        if (cd->noterm[ps]) {
+                            tcyk->add(talla, cd, ps, G->esInit); //Add to parsing table
+                        } else {
+                            tcyk->add(talla, cd, -1, G->esInit); //Add to parsing table
+                        }
+                    }
+                }
+
+            }//end c2=c1setH
+
+            for (list<CellCYK*>::iterator c2 = c1setV.begin(); c2 != c1setV.end(); c2++) {
+
+                for (list<ProductionB*>::iterator it = G->prodsV.begin(); it != G->prodsV.end(); it++) {
+                    if ((*it)->prior == -FLT_MAX) continue;
+
+                    //Production S -> A B
+                    int ps = ((ProductionB*) * it)->S;
+                    int pa = ((ProductionB*) * it)->A;
+                    int pb = ((ProductionB*) * it)->B;
+
+                    if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
+                        double cdpr = SPR.getVerProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
+                        if (cdpr <= 0.0) continue;
+
+                        CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
+
+                        if (!cd) continue;
+
+                        if (cd->noterm[ps]) {
+                            tcyk->add(talla, cd, ps, G->esInit); //Add to parsing table
+                        } else {
+                            tcyk->add(talla, cd, -1, G->esInit); //Add to parsing table
+                        }
+                    }
+                }
+
+                //prodsVe
+                for (list<ProductionB*>::iterator it = G->prodsVe.begin(); it != G->prodsVe.end(); it++) {
+                    if ((*it)->prior == -FLT_MAX) continue;
+
+                    //Production S -> A B
+                    int ps = ((ProductionB*) * it)->S;
+                    int pa = ((ProductionB*) * it)->A;
+                    int pb = ((ProductionB*) * it)->B;
+
+                    if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
+                        double cdpr = SPR.getVerProb(c1->noterm[pa], (*c2)->noterm[ pb ], true);
+                        if (cdpr <= 0.0) continue;
+
+                        CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
+
+                        if (!cd) continue;
+
+                        if (cd->noterm[ps]) {
+                            tcyk->add(talla, cd, ps, G->esInit); //Add to parsing table
+                        } else {
+                            tcyk->add(talla, cd, -1, G->esInit); //Add to parsing table
+                        }
+                    }
+                }
+
+            }//for in c1setV
+
+
+            for (list<CellCYK*>::iterator c2 = c1setU.begin(); c2 != c1setU.end(); c2++) {
+
+                for (list<ProductionB*>::iterator it = G->prodsV.begin(); it != G->prodsV.end(); it++) {
+                    if ((*it)->prior == -FLT_MAX) continue;
+
+                    //Production S -> A B
+                    int ps = ((ProductionB*) * it)->S;
+                    int pa = ((ProductionB*) * it)->A;
+                    int pb = ((ProductionB*) * it)->B;
+
+                    if (c1->noterm[ pb ] && (*c2)->noterm[ pa ]) {
+                        double cdpr = SPR.getVerProb((*c2)->noterm[pa], c1->noterm[ pb ]);
+                        if (cdpr <= 0.0) continue;
+
+                        CellCYK *cd = fusion(M, *it, (*c2)->noterm[ pa ], c1->noterm[ pb ], M->nStrokes(), cdpr);
+
+                        if (!cd) continue;
+
+                        if (cd->noterm[ps]) {
+                            tcyk->add(talla, cd, ps, G->esInit); //Add to parsing table
+                        } else {
+                            tcyk->add(talla, cd, -1, G->esInit); //Add to parsing table
+                        }
+                    }
+                }
+
+                //ProdsVe
+                for (list<ProductionB*>::iterator it = G->prodsVe.begin(); it != G->prodsVe.end(); it++) {
+                    if ((*it)->prior == -FLT_MAX) continue;
+
+                    //Production S -> A B
+                    int ps = ((ProductionB*) * it)->S;
+                    int pa = ((ProductionB*) * it)->A;
+                    int pb = ((ProductionB*) * it)->B;
+
+                    if (c1->noterm[ pb ] && (*c2)->noterm[ pa ]) {
+                        double cdpr = SPR.getVerProb((*c2)->noterm[pa], c1->noterm[ pb ], true);
+                        if (cdpr <= 0.0) continue;
+
+                        CellCYK *cd = fusion(M, *it, (*c2)->noterm[ pa ], c1->noterm[ pb ], M->nStrokes(), cdpr);
+
+                        if (!cd) continue;
+
+                        if (cd->noterm[ps]) {
+                            tcyk->add(talla, cd, ps, G->esInit); //Add to parsing table
+                        } else {
+                            tcyk->add(talla, cd, -1, G->esInit); //Add to parsing table
+                        }
+                    }
+                }
+            }
+
+            for (list<CellCYK*>::iterator c2 = c1setI.begin(); c2 != c1setI.end(); c2++) {
+
+                for (list<ProductionB*>::iterator it = G->prodsIns.begin(); it != G->prodsIns.end(); it++) {
+                    if ((*it)->prior == -FLT_MAX) continue;
+
+                    //Production S -> A B
+                    int ps = ((ProductionB*) * it)->S;
+                    int pa = ((ProductionB*) * it)->A;
+                    int pb = ((ProductionB*) * it)->B;
+
+                    if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
+                        double cdpr = SPR.getInsProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
+                        if (cdpr <= 0.0) continue;
+
+                        CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
+
+                        if (!cd) continue;
+
+                        if (cd->noterm[ps]) {
+                            tcyk->add(talla, cd, ps, G->esInit); //Add to parsing table
+                        } else {
+                            tcyk->add(talla, cd, -1, G->esInit); //Add to parsing table
+                        }
+                    }
+                }
+            }
+
+            //Mroot
+            for (list<CellCYK*>::iterator c2 = c1setM.begin(); c2 != c1setM.end(); c2++) {
+
+                for (list<ProductionB*>::iterator it = G->prodsMrt.begin(); it != G->prodsMrt.end(); it++) {
+                    if ((*it)->prior == -FLT_MAX) continue;
+
+                    //Production S -> A B
+                    int ps = ((ProductionB*) * it)->S;
+                    int pa = ((ProductionB*) * it)->A;
+                    int pb = ((ProductionB*) * it)->B;
+
+                    if (c1->noterm[ pa ] && (*c2)->noterm[ pb ]) {
+                        double cdpr = SPR.getMrtProb(c1->noterm[pa], (*c2)->noterm[ pb ]);
+                        if (cdpr <= 0.0) continue;
+
+                        CellCYK *cd = fusion(M, *it, c1->noterm[ pa ], (*c2)->noterm[ pb ], M->nStrokes(), cdpr);
+
+                        if (!cd) continue;
+
+                        if (cd->noterm[ps]) {
+                            tcyk->add(talla, cd, ps, G->esInit); //Add to parsing table
+                        } else {
+                            tcyk->add(talla, cd, -1, G->esInit); //Add to parsing table
+                        }
+                    }
+                }
+            }
+            //End Mroot
+
+
+            //Look for combining {x_subs} y {x^sups} in {x_subs^sups}
+            for (int pps = 0; pps < c1->nnt; pps++) {
+
+                //If c1->noterm[pa] is a Hypothesis of a subscript (parent_son)
+                if (c1->noterm[pps] && c1->noterm[pps]->prod && c1->noterm[pps]->prod->tipo() == 'B') {
+
+                    logspace[b + c1->noterm[pps]->hi->parent->talla]->getS(c1, &c1setS); //sup/sub-scripts union
+
+                    for (list<CellCYK*>::iterator c2 = c1setS.begin(); c2 != c1setS.end(); c2++) {
+
+                        if ((*c2)->x == c1->x && c1 != *c2) {
+
+                            for (list<ProductionB*>::iterator it = G->prodsSSE.begin(); it != G->prodsSSE.end(); it++) {
+                                if ((*it)->prior == -FLT_MAX) continue;
+
+                                //Production S -> A B
+                                int ps = ((ProductionB*) * it)->S;
+                                int pa = ((ProductionB*) * it)->A;
+                                int pb = ((ProductionB*) * it)->B;
+
+                                if (c1->noterm[pa] && (*c2)->noterm[pb]
+                                        && c1->noterm[pa]->prod && (*c2)->noterm[pb]->prod
+                                        && c1->noterm[pa]->hi == (*c2)->noterm[pb]->hi
+                                        && c1->noterm[pa]->prod->tipo() == 'B'
+                                        && (*c2)->noterm[pb]->prod->tipo() == 'P'
+                                        && c1->noterm[pa]->hd->parent->compatible((*c2)->noterm[pb]->hd->parent)) {
+
+
+                                    //Subscript and superscript should start almost vertically aligned
+                                    if (abs(c1->noterm[pa]->hd->parent->x - (*c2)->noterm[pb]->hd->parent->x) > 3 * M->RX) continue;
+                                    //Subscript and superscript should not overlap
+                                    if (max((*it)->solape(c1->noterm[pa]->hd, (*c2)->noterm[pb]->hd),
+                                            (*it)->solape((*c2)->noterm[pb]->hd, c1->noterm[pa]->hd)) > 0.1) continue;
+
+                                    float prob = c1->noterm[pa]->pr + (*c2)->noterm[pb]->pr - c1->noterm[pa]->hi->pr;
+
+                                    CellCYK *cd = new CellCYK(G->noTerminales.size(), M->nStrokes());
+
+                                    cd->x = min(c1->x, (*c2)->x);
+                                    cd->y = min(c1->y, (*c2)->y);
+                                    cd->s = max(c1->s, (*c2)->s);
+                                    cd->t = max(c1->t, (*c2)->t);
+
+                                    cd->noterm[ ps ] = new Hypothesis(-1, prob, cd, ps);
+
+                                    cd->noterm[ ps ]->lcen = c1->noterm[pa]->lcen;
+                                    cd->noterm[ ps ]->rcen = c1->noterm[pa]->rcen;
+                                    cd->ccUnion(c1, (*c2));
+
+                                    cd->noterm[ ps ]->hi = c1->noterm[pa];
+                                    cd->noterm[ ps ]->hd = (*c2)->noterm[pb]->hd;
+                                    cd->noterm[ ps ]->prod = *it;
+                                    //Save the production of the superscript in order to recover it when printing the used productions
+                                    cd->noterm[ ps ]->prod_sse = (*c2)->noterm[pb]->prod;
+
+                                    tcyk->add(talla, cd, ps, G->esInit);
+                                }
+                            }
+                        }
+
+                    }//end for c2 in c1setS
+
+                    c1setS.clear();
+                }
+            }//end for(int pps=0; pps<c1->nnt; pps++)
+
+        } //end for(CellCYK *c1=tcyk.get(a); c1; c1=c1->sig)
+
+    } //for 1 <= a < talla
+}
 
 void meParser::print_symrec(Hypothesis *H) {
     if (!H->pt) {
@@ -916,9 +920,11 @@ void meParser::print_symrec(Hypothesis *H) {
 
         printf("%s {", clatex.c_str());
 
-        for (int i = 0; i < H->parent->nc; i++)
-            if (H->parent->ccc[i])
+        for (int i = 0; i < H->parent->nc; i++) {
+            if (H->parent->ccc[i]) {
                 printf(" %d", i);
+            }
+        }
         printf(" }\n");
     }
 }
