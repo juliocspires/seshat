@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _SYMFEATURES_
-#define _SYMFEATURES_
+#pragma once
 
 class DataSequence;
 
@@ -44,5 +43,3 @@ public:
     DataSequence *getOnline(Sample *M, SegmentHyp *SegHyp);
     DataSequence *getOfflineFKI(int **img, int H, int W);
 };
-
-#endif

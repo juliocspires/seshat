@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _TABLECYK_
-#define _TABLECYK_
+#pragma once
 
 #include <cstdio>
 #include <map>
@@ -72,6 +71,3 @@ public:
     void updateTarget(coo *K, Hypothesis *H);
     void add(int n, CellCYK *celda, int noterm_id, bool *esinit);
 };
-
-
-#endif

@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _SYMREC_
-#define _SYMREC_
+#pragma once
 
 struct SegmentHyp;
 class Sample;
@@ -71,6 +70,3 @@ public:
     int clasificar(Sample *M, int ncomp, const int NB, int *vclase, float *vpr, int *as, int *ds);
     int clasificar(Sample *M, list<int> *LT, const int NB, int *vclase, float *vpr, int *as, int *ds);
 };
-
-
-#endif

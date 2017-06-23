@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _MEPARSER_
-#define _MEPARSER_
+#pragma once
 
 #include <cstdio>
 #include <cstdlib>
@@ -67,5 +66,3 @@ public:
     void print_latex(Hypothesis *H);
     void save_dot(Hypothesis *H, char *outfile);
 };
-
-#endif

@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _SPAREL_
-#define _SPAREL_
+#pragma once
 
 class CellCYK;
 
@@ -52,5 +51,3 @@ public:
     double getInsProb(Hypothesis *ha, Hypothesis *hb);
     double getMrtProb(Hypothesis *ha, Hypothesis *hb);
 };
-
-#endif

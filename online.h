@@ -35,8 +35,7 @@ covered by the following copyright and permission notice:
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ONLINE_H
-#define ONLINE_H
+#pragma once
 
 #include <math.h>
 #include <values.h>
@@ -83,7 +82,6 @@ public:
         return point_pu;
     }
 };
-
 
 
 //Integer point
@@ -145,7 +143,4 @@ public:
     sentence * anula_rep_points();
     sentence * suaviza_traza(int cont_size = 2);
 };
-
-
-#endif
 

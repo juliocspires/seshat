@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __GMM__
-#define __GMM__
+#pragma once
 
 #include <cstdio>
 #include <cstdlib>
@@ -37,6 +36,3 @@ public:
 
     void posterior(float *x, float *pr);
 };
-
-
-#endif

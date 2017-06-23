@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _SAMPLE_
-#define _SAMPLE_
+#pragma once
 
 class SymRec;
 class TableCYK;
@@ -115,5 +114,3 @@ public:
     void printInkML(Grammar *G, Hypothesis *H);
     void printSymRecInkML(Hypothesis *H, FILE *fout);
 };
-
-#endif

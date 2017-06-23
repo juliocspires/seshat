@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _GRAMMAR_
-#define _GRAMMAR_
+#pragma once
 
 class gParser;
 
@@ -57,5 +56,3 @@ struct Grammar {
     void addRuleIns(float pr, char *S, char *A, char *B, char *out, char *merge);
     void addRuleMrt(float pr, char *S, char *A, char *B, char *out, char *merge);
 };
-
-#endif

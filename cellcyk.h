@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _CELLCYK_
-#define _CELLCYK_
+#pragma once
 
 struct Hypothesis;
 
@@ -42,7 +41,6 @@ struct CellCYK {
     //Next cell in linked list (CYK table of same size)
     CellCYK *sig;
 
-
     //Methods
     CellCYK(int n, int ncc);
     ~CellCYK();
@@ -52,6 +50,3 @@ struct CellCYK {
     bool ccEqual(CellCYK *H);
     bool compatible(CellCYK *H);
 };
-
-
-#endif

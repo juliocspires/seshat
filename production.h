@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _PRODUCTION_
-#define _PRODUCTION_
+#pragma once
 
 class CellCYK;
 
@@ -208,5 +207,3 @@ public:
     int getNoTerm();
     void print();
 };
-
-#endif

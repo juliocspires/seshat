@@ -35,8 +35,7 @@ covered by the following copyright and permission notice:
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef FEATURES_H
-#define FEATURES_H
+#pragma once
 
 #include <math.h>
 #include <iostream>
@@ -92,6 +91,3 @@ private:
     void calculate_derivatives(vector<PointR> & points, bool norm = true);
     void calculate_kurvature();
 };
-
-
-#endif

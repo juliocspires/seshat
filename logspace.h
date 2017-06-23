@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _LOGSPACE_
-#define _LOGSPACE_
+#pragma once
 
 #include <cstdio>
 #include <list>
@@ -44,5 +43,3 @@ public:
     void getM(CellCYK *c, list<CellCYK*> *set);
     void getS(CellCYK *c, list<CellCYK*> *set);
 };
-
-#endif

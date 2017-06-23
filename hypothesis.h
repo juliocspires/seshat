@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _HYPOTHESIS_
-#define _HYPOTHESIS_
+#pragma once
 
 class ProductionB;
 class ProductionT;
@@ -61,5 +60,3 @@ struct Hypothesis {
 
     void copy(Hypothesis *SYM);
 };
-
-#endif

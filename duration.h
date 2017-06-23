@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _DURATION_MODEL_
-#define _DURATION_MODEL_
+#pragma once
 
 #include <cstdio>
 #include <cstdlib>
@@ -37,5 +36,3 @@ public:
 
     float prob(int symclas, int size);
 };
-
-#endif

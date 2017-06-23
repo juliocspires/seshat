@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with SESHAT.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _SEGMENTATION_MODEL_
-#define _SEGMENTATION_MODEL_
+#pragma once
 
 #include <cstdio>
 #include <cstdlib>
@@ -35,5 +34,3 @@ public:
 
     float prob(CellCYK *cd, Sample *m);
 };
-
-#endif
